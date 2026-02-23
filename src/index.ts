@@ -1,0 +1,35 @@
+export { SegmentationClient } from "./client.js";
+export {
+  NetworkError,
+  SegmentationApiError,
+  SegmentationError,
+  UploadError,
+  ValidationError,
+} from "./errors.js";
+export type { ValidationDirection, ValidationIssue } from "./errors.js";
+export type {
+  BatchSegmentAcceptedRaw,
+  BatchSegmentAcceptedResult,
+  BatchSegmentItemInput,
+  BatchSegmentMask,
+  BatchSegmentMaskRaw,
+  BatchSegmentStatusItem,
+  BatchSegmentStatusItemRaw,
+  BatchSegmentStatusRaw,
+  BatchSegmentStatusResult,
+  BinaryData,
+  CreateBatchSegmentJobRequest,
+  CreatePresignedUploadRequest,
+  FetchFunction,
+  GetBatchSegmentJobRequest,
+  PresignedUploadRaw,
+  PresignedUploadResult,
+  SegmentMask,
+  SegmentMaskRaw,
+  SegmentRequest,
+  SegmentResponseRaw,
+  SegmentResult,
+  SegmentationClientOptions,
+  UploadAndSegmentRequest,
+  UploadImageRequest,
+} from "./types.js";
