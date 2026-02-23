@@ -78,7 +78,6 @@ export function normalizeBatchSegmentStatus(
     successItems: raw.success_items,
     failedItems: raw.failed_items,
     items: raw.items.map((item) => ({
-      index: item.index,
       inputS3Key: item.inputS3Key,
       status: item.status,
       outputPrefix: item.output_prefix ?? undefined,

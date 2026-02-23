@@ -103,7 +103,6 @@ export interface BatchSegmentAcceptedRaw {
 }
 
 export interface BatchSegmentStatusItemRaw {
-  index: number;
   inputS3Key: string;
   status: "queued" | "processing" | "success" | "failed";
   output_prefix?: string | null;
@@ -173,7 +172,6 @@ export interface BatchSegmentAcceptedResult {
 }
 
 export interface BatchSegmentStatusItem {
-  index: number;
   inputS3Key: string;
   status: "queued" | "processing" | "success" | "failed";
   outputPrefix?: string;

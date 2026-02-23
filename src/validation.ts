@@ -172,7 +172,6 @@ export const batchSegmentMaskRawSchema: z.ZodMiniType<BatchSegmentMaskRaw> =
   });
 
 export const batchSegmentStatusItemRawSchema = z.object({
-  index: finiteNumber,
   inputS3Key: nonEmptyString,
   status: z.enum(["queued", "processing", "success", "failed"]),
   output_prefix: z.optional(z.nullable(nonEmptyString)),
