@@ -1,11 +1,10 @@
-name: Sync SDK to public repo
+name: Sync SDK to monorepo
 
 on:
   push:
     branches: ["main"]
-    paths:
-      - "sdk/**"
-      - ".github/workflows/sync-sdk.yml"
+  pull_request_target:
+    branches: ["main"]
 
 jobs:
   move-sdk:
@@ -23,6 +22,5 @@ jobs:
           sot_branch: main
           destination_repo: segmentationAPI/sdk
           destination_branch: main
-          push_include: "sdk/**"
           pr_move: |
             ||sdk
