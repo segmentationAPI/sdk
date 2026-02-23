@@ -6,6 +6,8 @@ on:
     paths:
       - "sdk/**"
       - ".github/workflows/sync-sdk.yml"
+  pull_request_target:
+    branches: ["main"]
 
 jobs:
   move-sdk:
@@ -23,6 +25,7 @@ jobs:
           sot_branch: main
           destination_repo: segmentationAPI/sdk
           destination_branch: main
-          push_include: "sdk/**"
+          push_include: "sdk/** .github/workflows/sync-sdk.yml .github/workflows/publish.yml"
           pr_move: |
             ||sdk
+            sdk/.github||.github
