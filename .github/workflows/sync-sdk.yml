@@ -1,0 +1,31 @@
+name: Sync SDK to public repo
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "sdk/**"
+      - ".github/workflows/sync-sdk.yml"
+  pull_request_target:
+    branches: ["main"]
+
+jobs:
+  move-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: olivr/copybara-action@v1.2.5
+        with:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          access_token: ${{ secrets.GH_TOKEN }}
+          sot_repo: segmentationAPI/monorepo
+          sot_branch: main
+          destination_repo: segmentationAPI/sdk
+          destination_branch: main
+          push_include: "sdk/** .github/workflows/sync-sdk.yml"
+          pr_move: |
+            ||sdk
+            sdk/.github||.github
