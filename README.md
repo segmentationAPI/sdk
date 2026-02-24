@@ -69,6 +69,35 @@ console.log(status.status, status.successItems, status.failedItems);
 console.log(status.items[0]?.masks?.[0]?.url);
 ```
 
+## Video Segmentation Flow
+
+```ts
+const videoResult = await client.segmentVideo({
+  video: videoFile, // Blob/File/Uint8Array
+  fps: 2, // or numFrames
+  maxFrames: 120,
+  points: [
+    [320, 180],
+    [410, 260],
+  ],
+  pointLabels: [1, 0],
+  pointObjectIds: [1, 1],
+  frameIdx: 0,
+  clearOldInputs: true,
+});
+
+console.log(videoResult.output.manifestUrl);
+console.log(videoResult.output.framesUrl);
+console.log(videoResult.counts.totalMasks);
+```
+
+Video segmentation supports visual prompts only:
+
+- Provide exactly one prompt mode: `points` or `boxes`
+- Use matching optional ID arrays (`pointObjectIds` or `boxObjectIds`)
+- Do not send text prompts (`text` is unsupported)
+- Choose at most one sampling selector: `fps` or `numFrames`
+
 ## Client Options
 
 ```ts

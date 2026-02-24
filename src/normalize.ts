@@ -6,6 +6,8 @@ import type {
   PresignedUploadRaw,
   PresignedUploadResult,
   SegmentMaskRaw,
+  SegmentVideoResponseRaw,
+  SegmentVideoResult,
   SegmentResponseRaw,
   SegmentResult,
 } from "./types.js";
@@ -47,6 +49,27 @@ export function normalizeSegment(
       box: mask.box,
       url: joinUrl(assetsBaseUrl, mask.key),
     })),
+    raw,
+  };
+}
+
+export function normalizeSegmentVideo(
+  raw: SegmentVideoResponseRaw,
+): SegmentVideoResult {
+  return {
+    requestId: raw.requestId ?? raw.request_id ?? "",
+    status: raw.status,
+    output: {
+      manifestUrl: raw.output.manifest_url,
+      framesUrl: raw.output.frames_url,
+      outputS3Prefix: raw.output.output_s3_prefix,
+      maskEncoding: raw.output.mask_encoding,
+    },
+    counts: {
+      framesProcessed: raw.counts.frames_processed,
+      framesWithMasks: raw.counts.frames_with_masks,
+      totalMasks: raw.counts.total_masks,
+    },
     raw,
   };
 }

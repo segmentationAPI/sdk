@@ -5,6 +5,7 @@ import {
   normalizeBatchSegmentStatus,
   normalizePresignedUpload,
   normalizeSegment,
+  normalizeSegmentVideo,
 } from "./normalize.js";
 import {
   batchSegmentAcceptedRawSchema,
@@ -20,6 +21,8 @@ import {
   segmentationClientOptionsSchema,
   segmentRequestSchema,
   segmentResponseRawSchema,
+  segmentVideoRequestSchema,
+  segmentVideoResponseRawSchema,
   uploadAndSegmentRequestSchema,
   uploadImageRequestSchema,
 } from "./validation.js";
@@ -35,6 +38,8 @@ import type {
   ResponseBody,
   SegmentRequest,
   SegmentResult,
+  SegmentVideoRequest,
+  SegmentVideoResult,
   SegmentationClientOptions,
   UploadAndSegmentRequest,
   UploadImageRequest,
@@ -84,6 +89,26 @@ function inferContentType(data: BinaryData): string | undefined {
     return data.type;
   }
   return undefined;
+}
+
+function toFormDataBlob(data: BinaryData): Blob {
+  if (typeof Blob !== "undefined" && data instanceof Blob) {
+    return data;
+  }
+  if (data instanceof Uint8Array) {
+    // Ensure BlobPart uses a plain ArrayBuffer (not ArrayBufferLike / SharedArrayBuffer).
+    const copied = new Uint8Array(data.byteLength);
+    copied.set(data);
+    return new Blob([copied.buffer], { type: "application/octet-stream" });
+  }
+  throw new TypeError("Unsupported multipart data type.");
+}
+
+function inferFilename(data: BinaryData, fallback: string): string {
+  if (typeof File !== "undefined" && data instanceof File && data.name) {
+    return data.name;
+  }
+  return fallback;
 }
 
 async function readResponseBody(response: Response): Promise<ResponseBody> {
@@ -236,6 +261,65 @@ export class SegmentationClient {
     });
 
     return normalizeSegment(raw, this.assetsBaseUrl);
+  }
+
+  async segmentVideo(input: SegmentVideoRequest): Promise<SegmentVideoResult> {
+    const parsedInput = parseInputOrThrow(
+      segmentVideoRequestSchema,
+      input,
+      "segmentVideo",
+    );
+
+    const formData = new FormData();
+    formData.append(
+      "video",
+      toFormDataBlob(parsedInput.video),
+      inferFilename(parsedInput.video, "video.bin"),
+    );
+
+    if (parsedInput.fps !== undefined) {
+      formData.append("fps", String(parsedInput.fps));
+    }
+    if (parsedInput.numFrames !== undefined) {
+      formData.append("num_frames", String(parsedInput.numFrames));
+    }
+    if (parsedInput.maxFrames !== undefined) {
+      formData.append("max_frames", String(parsedInput.maxFrames));
+    }
+
+    if (parsedInput.points !== undefined) {
+      formData.append("points", JSON.stringify(parsedInput.points));
+      if (parsedInput.pointLabels !== undefined) {
+        formData.append("point_labels", JSON.stringify(parsedInput.pointLabels));
+      }
+      if (parsedInput.pointObjectIds !== undefined) {
+        formData.append(
+          "point_obj_ids",
+          JSON.stringify(parsedInput.pointObjectIds),
+        );
+      }
+    } else {
+      formData.append("boxes", JSON.stringify(parsedInput.boxes));
+      if (parsedInput.boxObjectIds !== undefined) {
+        formData.append("box_obj_ids", JSON.stringify(parsedInput.boxObjectIds));
+      }
+    }
+
+    formData.append("frame_idx", String(parsedInput.frameIdx ?? 0));
+    formData.append(
+      "clear_old_inputs",
+      (parsedInput.clearOldInputs ?? true) ? "true" : "false",
+    );
+
+    const raw = await this.requestApi({
+      path: "/segment/video",
+      body: formData,
+      signal: parsedInput.signal,
+      responseSchema: segmentVideoResponseRawSchema,
+      operation: "segmentVideo",
+    });
+
+    return normalizeSegmentVideo(raw);
   }
 
   async uploadAndSegment(

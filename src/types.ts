@@ -32,6 +32,54 @@ export interface SegmentRequest {
   signal?: AbortSignal;
 }
 
+export type SegmentVideoPoint = [number, number];
+export type SegmentVideoBox = [number, number, number, number];
+export type SegmentVideoObjectId = number | string;
+
+export type SegmentVideoPointsPrompt = {
+  points: SegmentVideoPoint[];
+  pointLabels?: number[];
+  pointObjectIds?: SegmentVideoObjectId[];
+  boxes?: never;
+  boxObjectIds?: never;
+};
+
+export type SegmentVideoBoxesPrompt = {
+  boxes: SegmentVideoBox[];
+  boxObjectIds?: SegmentVideoObjectId[];
+  points?: never;
+  pointLabels?: never;
+  pointObjectIds?: never;
+};
+
+export type SegmentVideoSamplingByFps = {
+  fps: number;
+  numFrames?: never;
+};
+
+export type SegmentVideoSamplingByFrameCount = {
+  fps?: never;
+  numFrames: number;
+};
+
+export type SegmentVideoSamplingDefault = {
+  fps?: never;
+  numFrames?: never;
+};
+
+export type SegmentVideoRequest = (SegmentVideoPointsPrompt | SegmentVideoBoxesPrompt) &
+  (
+    | SegmentVideoSamplingByFps
+    | SegmentVideoSamplingByFrameCount
+    | SegmentVideoSamplingDefault
+  ) & {
+    video: BinaryData;
+    maxFrames?: number;
+    frameIdx?: number;
+    clearOldInputs?: boolean;
+    signal?: AbortSignal;
+  };
+
 export interface BatchSegmentItemInput {
   inputS3Key: string;
 }
@@ -91,6 +139,27 @@ export interface SegmentResponseRaw {
   num_instances: number;
   output_prefix: string;
   masks: SegmentMaskRaw[];
+}
+
+export interface SegmentVideoResponseRaw {
+  requestId?: string;
+  request_id?: string;
+  status: string;
+  output: SegmentVideoOutputRaw;
+  counts: SegmentVideoCountsRaw;
+}
+
+export interface SegmentVideoOutputRaw {
+  manifest_url: string;
+  frames_url: string;
+  output_s3_prefix: string;
+  mask_encoding: string;
+}
+
+export interface SegmentVideoCountsRaw {
+  frames_processed: number;
+  frames_with_masks: number;
+  total_masks: number;
 }
 
 export interface BatchSegmentAcceptedRaw {
@@ -160,6 +229,23 @@ export interface SegmentResult {
   outputUrl: string;
   masks: SegmentMask[];
   raw: SegmentResponseRaw;
+}
+
+export interface SegmentVideoResult {
+  requestId: string;
+  status: string;
+  output: {
+    manifestUrl: string;
+    framesUrl: string;
+    outputS3Prefix: string;
+    maskEncoding: string;
+  };
+  counts: {
+    framesProcessed: number;
+    framesWithMasks: number;
+    totalMasks: number;
+  };
+  raw: SegmentVideoResponseRaw;
 }
 
 export interface BatchSegmentAcceptedResult {

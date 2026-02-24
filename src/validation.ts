@@ -9,6 +9,8 @@ import type {
   FetchFunction,
   GetBatchSegmentJobRequest,
   PresignedUploadRaw,
+  SegmentVideoRequest,
+  SegmentVideoResponseRaw,
   SegmentMaskRaw,
   SegmentResponseRaw,
   SegmentRequest,
@@ -28,6 +30,9 @@ export const nonEmptyString = z
 export const finiteNumber = z
   .number()
   .check(z.refine(Number.isFinite, "Expected a finite number."));
+export const finiteInteger = finiteNumber.check(
+  z.refine(Number.isInteger, "Expected an integer."),
+);
 
 export const urlString = z.url();
 
@@ -91,6 +96,103 @@ export const segmentRequestSchema: z.ZodMiniType<SegmentRequest> = z.object({
   signal: abortSignalSchema,
 });
 
+const segmentVideoPointSchema = z
+  .array(finiteNumber)
+  .check(z.refine((value) => value.length === 2, "Expected [x, y] point tuple."));
+
+const segmentVideoBoxSchema = z
+  .array(finiteNumber)
+  .check(
+    z.refine(
+      (value) => value.length === 4,
+      "Expected [x1, y1, x2, y2] box tuple.",
+    ),
+  );
+
+const segmentVideoObjectIdSchema = z.union([finiteNumber, nonEmptyString]);
+
+export const segmentVideoRequestSchema: z.ZodMiniType<SegmentVideoRequest> = z
+  .object({
+    video: binaryDataSchema,
+    fps: z.optional(finiteNumber),
+    numFrames: z.optional(finiteInteger),
+    maxFrames: z.optional(finiteInteger),
+    points: z.optional(
+      z
+        .array(segmentVideoPointSchema)
+        .check(
+          z.refine(
+            (value) => value.length >= 1,
+            "Expected at least 1 point prompt.",
+          ),
+        ),
+    ),
+    pointLabels: z.optional(z.array(finiteNumber)),
+    pointObjectIds: z.optional(z.array(segmentVideoObjectIdSchema)),
+    boxes: z.optional(
+      z
+        .array(segmentVideoBoxSchema)
+        .check(
+          z.refine(
+            (value) => value.length >= 1,
+            "Expected at least 1 box prompt.",
+          ),
+        ),
+    ),
+    boxObjectIds: z.optional(z.array(segmentVideoObjectIdSchema)),
+    frameIdx: z.optional(finiteInteger),
+    clearOldInputs: z.optional(z.boolean()),
+    text: z.optional(z.never("Field `text` is not supported for video segmentation.")),
+    signal: abortSignalSchema,
+  })
+  .check(
+    z.refine(
+      (value) => (value.points !== undefined) !== (value.boxes !== undefined),
+      "Provide exactly one visual prompt mode: `points` or `boxes`.",
+    ),
+    z.refine(
+      (value) => !(value.fps !== undefined && value.numFrames !== undefined),
+      "Provide only one sampling selector: `fps` or `numFrames`.",
+    ),
+    z.refine(
+      (value) => value.fps === undefined || value.fps > 0,
+      "`fps` must be greater than 0.",
+    ),
+    z.refine(
+      (value) => value.numFrames === undefined || value.numFrames >= 1,
+      "`numFrames` must be >= 1.",
+    ),
+    z.refine(
+      (value) => value.maxFrames === undefined || value.maxFrames >= 1,
+      "`maxFrames` must be >= 1.",
+    ),
+    z.refine(
+      (value) => value.frameIdx === undefined || value.frameIdx >= 0,
+      "`frameIdx` must be >= 0.",
+    ),
+    z.refine(
+      (value) =>
+        value.points === undefined ||
+        value.pointLabels === undefined ||
+        value.pointLabels.length === value.points.length,
+      "`pointLabels` length must match `points` length.",
+    ),
+    z.refine(
+      (value) =>
+        value.points === undefined ||
+        value.pointObjectIds === undefined ||
+        value.pointObjectIds.length === value.points.length,
+      "`pointObjectIds` length must match `points` length.",
+    ),
+    z.refine(
+      (value) =>
+        value.boxes === undefined ||
+        value.boxObjectIds === undefined ||
+        value.boxObjectIds.length === value.boxes.length,
+      "`boxObjectIds` length must match `boxes` length.",
+    ),
+  );
+
 export const uploadAndSegmentRequestSchema: z.ZodMiniType<UploadAndSegmentRequest> =
   z.object({
     prompts: promptsSchema,
@@ -152,6 +254,24 @@ export const segmentResponseRawSchema: z.ZodMiniType<SegmentResponseRaw> =
     num_instances: finiteNumber,
     output_prefix: nonEmptyString,
     masks: z.array(segmentMaskRawSchema),
+  });
+
+export const segmentVideoResponseRawSchema: z.ZodMiniType<SegmentVideoResponseRaw> =
+  z.object({
+    requestId: z.optional(z.string()),
+    request_id: z.optional(z.string()),
+    status: nonEmptyString,
+    output: z.object({
+      manifest_url: nonEmptyString,
+      frames_url: nonEmptyString,
+      output_s3_prefix: nonEmptyString,
+      mask_encoding: nonEmptyString,
+    }),
+    counts: z.object({
+      frames_processed: finiteInteger,
+      frames_with_masks: finiteInteger,
+      total_masks: finiteInteger,
+    }),
   });
 
 export const batchSegmentAcceptedRawSchema: z.ZodMiniType<BatchSegmentAcceptedRaw> =
