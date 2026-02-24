@@ -73,7 +73,7 @@ console.log(status.items[0]?.masks?.[0]?.url);
 
 ```ts
 const videoResult = await client.segmentVideo({
-  video: videoFile, // Blob/File/Uint8Array
+  file: videoFile, // Blob/File/Uint8Array
   fps: 2, // or numFrames
   maxFrames: 120,
   points: [

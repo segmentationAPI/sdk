@@ -73,7 +73,7 @@ export type SegmentVideoRequest = (SegmentVideoPointsPrompt | SegmentVideoBoxesP
     | SegmentVideoSamplingByFrameCount
     | SegmentVideoSamplingDefault
   ) & {
-    video: BinaryData;
+    file: BinaryData;
     maxFrames?: number;
     frameIdx?: number;
     clearOldInputs?: boolean;

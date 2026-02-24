@@ -272,9 +272,9 @@ export class SegmentationClient {
 
     const formData = new FormData();
     formData.append(
-      "video",
-      toFormDataBlob(parsedInput.video),
-      inferFilename(parsedInput.video, "video.bin"),
+      "file",
+      toFormDataBlob(parsedInput.file),
+      inferFilename(parsedInput.file, "file.bin"),
     );
 
     if (parsedInput.fps !== undefined) {

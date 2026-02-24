@@ -186,7 +186,7 @@ describe("SegmentationClient", () => {
     });
 
     const result = await client.segmentVideo({
-      video: new Uint8Array([1, 2, 3, 4]),
+      file: new Uint8Array([1, 2, 3, 4]),
       fps: 2.5,
       maxFrames: 80,
       points: [
@@ -213,7 +213,7 @@ describe("SegmentationClient", () => {
     expect(formData.get("point_obj_ids")).toBe("[101,101]");
     expect(formData.get("frame_idx")).toBe("5");
     expect(formData.get("clear_old_inputs")).toBe("false");
-    expect(formData.get("video")).toBeTruthy();
+    expect(formData.get("file")).toBeTruthy();
 
     expect(result.requestId).toBe("video-request-1");
     expect(result.status).toBe("success");
@@ -251,7 +251,7 @@ describe("SegmentationClient", () => {
     });
 
     await client.segmentVideo({
-      video: new Uint8Array([9, 8, 7]),
+      file: new Uint8Array([9, 8, 7]),
       numFrames: 16,
       boxes: [[1, 2, 3, 4]],
       boxObjectIds: [1],
@@ -633,7 +633,7 @@ describe("SegmentationClient", () => {
 
     await expect(
       client.segmentVideo({
-        video: new Uint8Array([1]),
+        file: new Uint8Array([1]),
         points: [[1, 2]],
         boxes: [[1, 2, 3, 4]],
       } as never),
@@ -644,7 +644,7 @@ describe("SegmentationClient", () => {
 
     await expect(
       client.segmentVideo({
-        video: new Uint8Array([1]),
+        file: new Uint8Array([1]),
         points: [[1, 2]],
         fps: 1,
         numFrames: 5,
@@ -656,7 +656,7 @@ describe("SegmentationClient", () => {
 
     await expect(
       client.segmentVideo({
-        video: new Uint8Array([1]),
+        file: new Uint8Array([1]),
         points: [[1, 2], [3, 4]],
         pointLabels: [1],
       } as never),

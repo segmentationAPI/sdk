@@ -193,7 +193,7 @@ const segmentVideoSamplingDefaultSchema = z.object({
 });
 
 const segmentVideoBaseSchema = z.object({
-  video: binaryDataSchema,
+  file: binaryDataSchema,
   maxFrames: z.optional(finiteInteger),
   frameIdx: z.optional(finiteInteger),
   clearOldInputs: z.optional(z.boolean()),
