@@ -27,5 +27,5 @@ jobs:
           destination_branch: main
           push_include: "web/packages/sdk/** .github/workflows/sync-sdk.yml .github/workflows/publish.yml"
           pr_move: |
-            ||sdk
-            web/packages/sdk/.github||.github
+            web/packages/sdk||
+            .github||.github
