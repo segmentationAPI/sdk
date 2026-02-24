@@ -25,7 +25,7 @@ jobs:
           sot_branch: main
           destination_repo: segmentationAPI/sdk
           destination_branch: main
-          push_include: "sdk/** .github/workflows/sync-sdk.yml .github/workflows/publish.yml"
+          push_include: "web/packages/sdk/** .github/workflows/sync-sdk.yml .github/workflows/publish.yml"
           pr_move: |
             ||sdk
             web/packages/sdk/.github||.github
