@@ -11,8 +11,8 @@ on:
 
 jobs:
   move-sdk:
-    if: ${{ github.event_name != 'push' || github.repository == 'segmentationAPI/monorepo' }}
-    runs-on: ubuntu-24.04-arm
+    if: ${{ (github.event_name == 'push' && github.repository == 'segmentationAPI/monorepo') || (github.event_name == 'pull_request_target' && github.repository == 'segmentationAPI/sdk') }}
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     steps:
       - uses: actions/checkout@v6
         with:
