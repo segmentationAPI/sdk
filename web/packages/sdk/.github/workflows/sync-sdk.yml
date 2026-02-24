@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "sdk/**"
+      - "web/packages/sdk/**"
       - ".github/workflows/sync-sdk.yml"
   pull_request_target:
     branches: ["main"]
@@ -28,4 +28,4 @@ jobs:
           push_include: "sdk/** .github/workflows/sync-sdk.yml .github/workflows/publish.yml"
           pr_move: |
             ||sdk
-            sdk/.github||.github
+            web/packages/sdk/.github||.github
