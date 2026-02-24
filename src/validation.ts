@@ -96,72 +96,124 @@ export const segmentRequestSchema: z.ZodMiniType<SegmentRequest> = z.object({
   signal: abortSignalSchema,
 });
 
-const segmentVideoPointSchema = z
-  .array(finiteNumber)
-  .check(z.refine((value) => value.length === 2, "Expected [x, y] point tuple."));
+const segmentVideoPointSchema = z.tuple([finiteNumber, finiteNumber]);
 
-const segmentVideoBoxSchema = z
-  .array(finiteNumber)
-  .check(
-    z.refine(
-      (value) => value.length === 4,
-      "Expected [x1, y1, x2, y2] box tuple.",
-    ),
-  );
+const segmentVideoBoxSchema = z.tuple([
+  finiteNumber,
+  finiteNumber,
+  finiteNumber,
+  finiteNumber,
+]);
 
 const segmentVideoObjectIdSchema = z.union([finiteNumber, nonEmptyString]);
 
-export const segmentVideoRequestSchema: z.ZodMiniType<SegmentVideoRequest> = z
+const segmentVideoPointsPromptSchema = z
   .object({
-    video: binaryDataSchema,
-    fps: z.optional(finiteNumber),
-    numFrames: z.optional(finiteInteger),
-    maxFrames: z.optional(finiteInteger),
-    points: z.optional(
-      z
-        .array(segmentVideoPointSchema)
-        .check(
-          z.refine(
-            (value) => value.length >= 1,
-            "Expected at least 1 point prompt.",
-          ),
-        ),
-    ),
+    points: z
+      .array(segmentVideoPointSchema)
+      .check(
+        z.refine((value) => value.length >= 1, "Expected at least 1 point prompt."),
+      ),
     pointLabels: z.optional(z.array(finiteNumber)),
     pointObjectIds: z.optional(z.array(segmentVideoObjectIdSchema)),
     boxes: z.optional(
-      z
-        .array(segmentVideoBoxSchema)
-        .check(
-          z.refine(
-            (value) => value.length >= 1,
-            "Expected at least 1 box prompt.",
-          ),
-        ),
+      z.never("Provide exactly one visual prompt mode: `points` or `boxes`."),
     ),
-    boxObjectIds: z.optional(z.array(segmentVideoObjectIdSchema)),
-    frameIdx: z.optional(finiteInteger),
-    clearOldInputs: z.optional(z.boolean()),
-    text: z.optional(z.never("Field `text` is not supported for video segmentation.")),
-    signal: abortSignalSchema,
+    boxObjectIds: z.optional(
+      z.never("Provide exactly one visual prompt mode: `points` or `boxes`."),
+    ),
   })
   .check(
     z.refine(
-      (value) => (value.points !== undefined) !== (value.boxes !== undefined),
-      "Provide exactly one visual prompt mode: `points` or `boxes`.",
+      (value) =>
+        value.pointLabels === undefined ||
+        value.pointLabels.length === value.points.length,
+      "`pointLabels` length must match `points` length.",
     ),
     z.refine(
-      (value) => !(value.fps !== undefined && value.numFrames !== undefined),
-      "Provide only one sampling selector: `fps` or `numFrames`.",
+      (value) =>
+        value.pointObjectIds === undefined ||
+        value.pointObjectIds.length === value.points.length,
+      "`pointObjectIds` length must match `points` length.",
     ),
+  );
+
+const segmentVideoBoxesPromptSchema = z
+  .object({
+    boxes: z
+      .array(segmentVideoBoxSchema)
+      .check(
+        z.refine((value) => value.length >= 1, "Expected at least 1 box prompt."),
+      ),
+    boxObjectIds: z.optional(z.array(segmentVideoObjectIdSchema)),
+    points: z.optional(
+      z.never("Provide exactly one visual prompt mode: `points` or `boxes`."),
+    ),
+    pointLabels: z.optional(
+      z.never("Provide exactly one visual prompt mode: `points` or `boxes`."),
+    ),
+    pointObjectIds: z.optional(
+      z.never("Provide exactly one visual prompt mode: `points` or `boxes`."),
+    ),
+  })
+  .check(
     z.refine(
-      (value) => value.fps === undefined || value.fps > 0,
-      "`fps` must be greater than 0.",
+      (value) =>
+        value.boxObjectIds === undefined ||
+        value.boxObjectIds.length === value.boxes.length,
+      "`boxObjectIds` length must match `boxes` length.",
     ),
-    z.refine(
-      (value) => value.numFrames === undefined || value.numFrames >= 1,
-      "`numFrames` must be >= 1.",
+  );
+
+const segmentVideoSamplingByFpsSchema = z.object({
+  fps: finiteNumber.check(
+    z.refine((value) => value > 0, "`fps` must be greater than 0."),
+  ),
+  numFrames: z.optional(
+    z.never("Provide only one sampling selector: `fps` or `numFrames`."),
+  ),
+});
+
+const segmentVideoSamplingByFrameCountSchema = z.object({
+  fps: z.optional(
+    z.never("Provide only one sampling selector: `fps` or `numFrames`."),
+  ),
+  numFrames: finiteInteger.check(
+    z.refine((value) => value >= 1, "`numFrames` must be >= 1."),
+  ),
+});
+
+const segmentVideoSamplingDefaultSchema = z.object({
+  fps: z.optional(
+    z.never("Provide only one sampling selector: `fps` or `numFrames`."),
+  ),
+  numFrames: z.optional(
+    z.never("Provide only one sampling selector: `fps` or `numFrames`."),
+  ),
+});
+
+const segmentVideoBaseSchema = z.object({
+  video: binaryDataSchema,
+  maxFrames: z.optional(finiteInteger),
+  frameIdx: z.optional(finiteInteger),
+  clearOldInputs: z.optional(z.boolean()),
+  text: z.optional(z.never("Field `text` is not supported for video segmentation.")),
+  signal: abortSignalSchema,
+});
+
+export const segmentVideoRequestSchema: z.ZodMiniType<SegmentVideoRequest> = z
+  .intersection(
+    segmentVideoBaseSchema,
+    z.intersection(
+      z.union([segmentVideoPointsPromptSchema, segmentVideoBoxesPromptSchema]),
+      z.union([
+        segmentVideoSamplingByFpsSchema,
+        segmentVideoSamplingByFrameCountSchema,
+        segmentVideoSamplingDefaultSchema,
+      ]),
     ),
+  )
+  .check(
     z.refine(
       (value) => value.maxFrames === undefined || value.maxFrames >= 1,
       "`maxFrames` must be >= 1.",
@@ -169,27 +221,6 @@ export const segmentVideoRequestSchema: z.ZodMiniType<SegmentVideoRequest> = z
     z.refine(
       (value) => value.frameIdx === undefined || value.frameIdx >= 0,
       "`frameIdx` must be >= 0.",
-    ),
-    z.refine(
-      (value) =>
-        value.points === undefined ||
-        value.pointLabels === undefined ||
-        value.pointLabels.length === value.points.length,
-      "`pointLabels` length must match `points` length.",
-    ),
-    z.refine(
-      (value) =>
-        value.points === undefined ||
-        value.pointObjectIds === undefined ||
-        value.pointObjectIds.length === value.points.length,
-      "`pointObjectIds` length must match `points` length.",
-    ),
-    z.refine(
-      (value) =>
-        value.boxes === undefined ||
-        value.boxObjectIds === undefined ||
-        value.boxObjectIds.length === value.boxes.length,
-      "`boxObjectIds` length must match `boxes` length.",
     ),
   );
 
