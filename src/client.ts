@@ -1,174 +1,141 @@
-import { API_BASE_URL, ASSETS_BASE_URL } from "./constants";
-import { toJobStatus } from "./mappers/job-status.mapper";
-import {
-  AccountResponseSchema,
-  EmptyObjectSchema,
-  JobDownloadResponseSchema,
-  JobListResponseSchema,
-  JobRequestSchema,
-  JobResponseSchema,
-  JobStatusResponseSchema,
-  OutputManifestSchema,
-  PresignRequestSchema,
-  PresignResponseSchema,
-} from "./schemas";
-import type {
-  AccountResponse,
-  JobDownload,
-  JobRequest,
-  JobListResponse,
-  JobResponse,
-  JobStatus,
-  JobStatusResponse,
-  ListJobsParams,
-  OutputManifest,
-  PresignRequest,
-  PresignResponse,
-} from "./types";
-import { getRequest, postRequest } from "./utils";
+import { DashboardApi } from "../generated/src/apis/DashboardApi.js";
+import { JobsApi } from "../generated/src/apis/JobsApi.js";
+import { PlaygroundApi } from "../generated/src/apis/PlaygroundApi.js";
+import { UploadsApi } from "../generated/src/apis/UploadsApi.js";
+import { Configuration } from "../generated/src/runtime.js";
+import { Account } from "./resources/account.js";
+import { APIKeys } from "./resources/api-keys.js";
+import { Billing } from "./resources/billing.js";
+import { Jobs } from "./resources/jobs.js";
+import { Playground } from "./resources/playground.js";
+import { Uploads } from "./resources/uploads.js";
 
-export class SegmentationClient {
-  private apiKey: string;
-  private accountId: string;
+const DEFAULT_BASE_URL = "https://api.segmentationapi.com";
+const DEFAULT_TIMEOUT = 60_000;
 
-  private constructor(apiKey: string, accountId: string) {
-    this.apiKey = apiKey;
-    this.accountId = accountId;
-  }
+type Credential = string | (() => string | Promise<string>);
 
-  static async create(apiKey: string): Promise<SegmentationClient> {
-    const account = await SegmentationClient.getAccount(apiKey);
-    return new SegmentationClient(apiKey, account.accountId);
-  }
+interface SharedOptions {
+  /** Override the production API URL, primarily for testing. */
+  baseURL?: string;
+  /** Default request timeout in milliseconds. Set to `0` to disable it. */
+  timeout?: number;
+  /** Additional headers sent with every request. */
+  defaultHeaders?: Record<string, string>;
+  /** Override the Fetch implementation. */
+  fetch?: typeof globalThis.fetch;
+  /** Called when the API responds with HTTP 401. */
+  onUnauthorized?: () => void;
+}
 
-  private static async getAccount(apiKey: string): Promise<AccountResponse> {
-    const url = `${API_BASE_URL}/account`;
-    return getRequest({
-      url,
-      init: {
-        headers: {
-          "x-api-key": apiKey,
-        },
-      },
-      responseSchema: AccountResponseSchema,
-    });
-  }
+export type SegmentationAPIOptions = SharedOptions &
+  (
+    | {
+        /** A secret SegmentationAPI key. Never expose it in browser code. */
+        apiKey: Credential;
+        accessToken?: never;
+      }
+    | {
+        /** A bearer access token, or a provider that refreshes it when needed. */
+        accessToken: Credential;
+        apiKey?: never;
+      }
+  );
 
-  async createJob(job: JobRequest): Promise<JobResponse> {
-    const url = `${API_BASE_URL}/jobs`;
-    return postRequest({
-      url,
-      init: {
-        headers: {
-          "x-api-key": this.apiKey,
-        },
-      },
-      body: job,
-      requestSchema: JobRequestSchema,
-      responseSchema: JobResponseSchema,
-    });
-  }
+export class SegmentationAPI {
+  readonly account: Account;
+  readonly apiKeys: APIKeys;
+  readonly billing: Billing;
+  readonly jobs: Jobs;
+  readonly playground: Playground;
+  readonly uploads: Uploads;
 
-  async getJobStatus(jobId: string): Promise<JobStatus> {
-    const url = `${API_BASE_URL}/jobs/${jobId}`;
-    const result: JobStatusResponse = await getRequest({
-      url,
-      init: {
-        headers: {
-          "x-api-key": this.apiKey,
-        },
-      },
-      responseSchema: JobStatusResponseSchema,
+  private readonly requestControllers = new Set<AbortController>();
+
+  constructor(options: SegmentationAPIOptions) {
+    validateAuth(options);
+    const timeout = options.timeout ?? DEFAULT_TIMEOUT;
+    if (!Number.isFinite(timeout) || timeout < 0) {
+      throw new RangeError("timeout must be a non-negative finite number");
+    }
+
+    const configuration = new Configuration({
+      apiKey: options.apiKey,
+      accessToken: options.accessToken,
+      basePath: normalizeBaseURL(options.baseURL ?? DEFAULT_BASE_URL),
+      fetchApi: this.createFetch(options.fetch ?? globalThis.fetch, options.onUnauthorized),
+      headers: options.defaultHeaders,
     });
 
-    return toJobStatus(result);
+    const dashboardApi = new DashboardApi(configuration);
+
+    this.account = new Account(dashboardApi, timeout);
+    this.apiKeys = new APIKeys(dashboardApi, timeout);
+    this.billing = new Billing(dashboardApi, timeout);
+    this.jobs = new Jobs(new JobsApi(configuration), timeout);
+    this.playground = new Playground(new PlaygroundApi(configuration), timeout);
+    this.uploads = new Uploads(new UploadsApi(configuration), timeout);
   }
 
-  async createJobDownload(jobId: string): Promise<JobDownload> {
-    const url = `${API_BASE_URL}/jobs/${jobId}/download`;
-    return postRequest({
-      url,
-      init: {
-        headers: {
-          "x-api-key": this.apiKey,
-        },
-      },
-      body: {},
-      requestSchema: EmptyObjectSchema,
-      responseSchema: JobDownloadResponseSchema,
-    });
+  /** Abort all requests currently in flight. */
+  cancelAll(): void {
+    for (const controller of this.requestControllers) controller.abort();
+    this.requestControllers.clear();
   }
 
-  async getJobDownload(jobId: string): Promise<JobDownload> {
-    const url = `${API_BASE_URL}/jobs/${jobId}/download`;
-    return getRequest({
-      url,
-      init: {
-        headers: {
-          "x-api-key": this.apiKey,
-        },
-      },
-      responseSchema: JobDownloadResponseSchema,
-    });
+  private createFetch(
+    fetchApi: typeof globalThis.fetch,
+    onUnauthorized: (() => void) | undefined,
+  ): typeof globalThis.fetch {
+    return async (input, init) => {
+      const controller = new AbortController();
+      this.requestControllers.add(controller);
+      try {
+        const response = await fetchApi(input, {
+          ...init,
+          signal:
+            init?.signal == null
+              ? controller.signal
+              : AbortSignal.any([init.signal, controller.signal]),
+        });
+        if (response.status === 401) onUnauthorized?.();
+        return response;
+      } finally {
+        this.requestControllers.delete(controller);
+      }
+    };
+  }
+}
+
+function validateAuth(options: SegmentationAPIOptions): void {
+  const hasApiKey = options.apiKey !== undefined;
+  const hasAccessToken = options.accessToken !== undefined;
+  if (hasApiKey === hasAccessToken) {
+    throw new TypeError("Provide exactly one of apiKey or accessToken");
   }
 
-  async listJobs(params: ListJobsParams = {}): Promise<JobListResponse> {
-    const url = `${API_BASE_URL}/jobs`;
-    return getRequest({
-      url,
-      query: {
-        limit: params.limit,
-        nextToken: params.nextToken,
-      },
-      init: {
-        headers: {
-          "x-api-key": this.apiKey,
-        },
-      },
-      responseSchema: JobListResponseSchema,
-    });
+  const credential = hasApiKey ? options.apiKey : options.accessToken;
+  if (typeof credential === "string" && credential.trim().length === 0) {
+    throw new TypeError(`${hasApiKey ? "apiKey" : "accessToken"} must not be empty`);
+  }
+}
+
+function normalizeBaseURL(baseURL: string): string {
+  const normalized = baseURL.replace(/\/+$/, "");
+  if (normalized.length === 0) {
+    throw new TypeError("baseURL must not be empty");
   }
 
-  async presign(request: PresignRequest): Promise<PresignResponse> {
-    const url = `${API_BASE_URL}/uploads/presign`;
-    return postRequest({
-      url,
-      init: {
-        headers: {
-          "x-api-key": this.apiKey,
-        },
-      },
-      body: request,
-      requestSchema: PresignRequestSchema,
-      responseSchema: PresignResponseSchema,
-    });
+  let url: URL;
+  try {
+    url = new URL(normalized);
+  } catch (cause) {
+    throw new TypeError("baseURL must be a valid URL", { cause });
   }
 
-  async createPlaygroundJob(job: JobRequest): Promise<JobResponse> {
-    const url = `${API_BASE_URL}/playground/jobs`;
-    return postRequest({
-      url,
-      init: {
-        headers: {
-          "x-api-key": this.apiKey,
-        },
-      },
-      body: job,
-      requestSchema: JobRequestSchema,
-      responseSchema: JobResponseSchema,
-    });
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    throw new TypeError("baseURL must use HTTP or HTTPS");
   }
 
-  async getOutputManifest(jobId: string): Promise<OutputManifest> {
-    const url = `${ASSETS_BASE_URL}/outputs/${this.accountId}/${jobId}/output_manifest.json`;
-    return getRequest({
-      url,
-      init: {
-        headers: {
-          "x-api-key": this.apiKey,
-        },
-      },
-      responseSchema: OutputManifestSchema,
-    });
-  }
+  return normalized;
 }

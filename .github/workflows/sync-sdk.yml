@@ -1,24 +1,26 @@
-name: Sync SDK to public repo
+name: Sync SDK to public repository
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
     paths:
-      - "web/packages/sdk/**"
+      - "sdks/typescript/**"
       - ".github/workflows/sync-sdk.yml"
   pull_request_target:
-    branches: ["main"]
+    branches: [main]
 
 jobs:
-  move-sdk:
+  sync:
     if: ${{ (github.event_name == 'push' && github.repository == 'segmentationAPI/monorepo') || (github.event_name == 'pull_request_target' && github.repository == 'segmentationAPI/sdk') }}
     runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - uses: olivr/copybara-action@v1.2.5
+      - name: Sync SDK subtree
+        uses: olivr/copybara-action@v1.2.5
         with:
           ssh_key: ${{ secrets.SSH_KEY }}
           access_token: ${{ secrets.GH_TOKEN }}
@@ -28,11 +30,11 @@ jobs:
           destination_branch: main
           workflow: ${{ github.event_name == 'pull_request_target' && 'pr' || 'push' }}
           pr_number: ${{ github.event.pull_request.number }}
-          push_include: "web/packages/sdk/** web/packages/sdk/.github/workflows/publish.yml .github/workflows/sync-sdk.yml"
+          push_include: "sdks/typescript/** sdks/typescript/.github/workflows/publish.yml .github/workflows/sync-sdk.yml"
           push_move: |
-            .github||web/packages/sdk/.github||workflows/sync-sdk.yml
-            web/packages/sdk||
+            .github||sdks/typescript/.github||workflows/sync-sdk.yml
+            sdks/typescript||
           pr_move: |
-            ||web/packages/sdk
-            web/packages/sdk/.github||.github||workflows/sync-sdk.yml
-          committer: "Github Actions <actions@github.com>"
+            ||sdks/typescript
+            sdks/typescript/.github||.github||workflows/sync-sdk.yml
+          committer: "GitHub Actions <actions@github.com>"
