@@ -25,7 +25,6 @@ void client.jobs.results.retrieve("job-1");
 void client.jobs.downloads.create("job-1");
 void client.jobs.downloads.retrieve("job-1");
 void client.uploads.create({ contentType: "image/png" });
-void client.playground.jobs.create({ tasks: ["task-1"], prompts: ["person"] });
 void bearerClient.account.retrieve();
 void bearerClient.account.overview.retrieve();
 void bearerClient.apiKeys.list();
@@ -37,9 +36,6 @@ void bearerClient.jobs.list({ mode: "batch", status: "success" });
 
 // @ts-expect-error Generated transport wrappers are not part of the public request shape.
 void client.jobs.create({ jobCreateRequest: request });
-
-// @ts-expect-error The playground resource supplies its fixed image discriminator.
-void client.playground.jobs.create({ type: "image", tasks: ["task-1"], prompts: ["person"] });
 
 // @ts-expect-error Generated transport classes are intentionally not exported.
 import { JobsApi } from "../src/index.js";

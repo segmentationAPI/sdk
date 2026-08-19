@@ -11,7 +11,6 @@ test("exposes a semantic resource hierarchy and keeps generated internals privat
   assert.ok(client.jobs.create instanceof Function);
   assert.ok(client.jobs.results.retrieve instanceof Function);
   assert.ok(client.jobs.downloads.create instanceof Function);
-  assert.ok(client.playground.jobs.create instanceof Function);
   assert.ok(client.uploads.create instanceof Function);
   assert.ok(client.account.retrieve instanceof Function);
   assert.ok(client.account.overview.retrieve instanceof Function);
@@ -65,9 +64,6 @@ test("uses the same semantic resources with bearer-token authentication", async 
           expiresIn: 300,
         });
       }
-      if (pathname === "/v1/playground/jobs") {
-        return json({ jobId: "playground-1", type: "image", totalItems: 1 }, 202);
-      }
       if (pathname === "/v1/jobs" && init.method === "GET") {
         return json({ items: [jobSummary("job-1")], nextToken: null });
       }
@@ -111,7 +107,6 @@ test("uses the same semantic resources with bearer-token authentication", async 
   await client.jobs.results.retrieve("job-1");
   await client.jobs.downloads.create("job-1");
   await client.jobs.downloads.retrieve("job-1");
-  await client.playground.jobs.create({ tasks: ["task-1"], prompts: ["person"] });
 
   assert.equal(page.items[0].processingMode, "single");
   assert.ok(page.items[0].createdAt instanceof Date);
@@ -143,9 +138,6 @@ test("maps semantic methods to authenticated API requests", async () => {
           bucket: "uploads",
           expiresIn: 900,
         });
-      }
-      if (pathname === "/v1/playground/jobs") {
-        return json({ jobId: "playground-1", type: "image", totalItems: 1 }, 202);
       }
       if (pathname.endsWith("/result")) {
         return json({ manifest: imageManifest(), assets: [], expiresIn: 900 });
@@ -185,7 +177,6 @@ test("maps semantic methods to authenticated API requests", async () => {
   await client.jobs.results.retrieve("job/1");
   await client.jobs.downloads.create("job/1");
   await client.jobs.downloads.retrieve("job/1");
-  await client.playground.jobs.create({ tasks: ["task-1"], prompts: ["person"] });
 
   assert.deepEqual(
     requests.map(({ url, init }) => [init.method, new URL(url).pathname]),
@@ -196,7 +187,6 @@ test("maps semantic methods to authenticated API requests", async () => {
       ["GET", "/v1/jobs/job%2F1/result"],
       ["POST", "/v1/jobs/job%2F1/download"],
       ["GET", "/v1/jobs/job%2F1/download"],
-      ["POST", "/v1/playground/jobs"],
     ],
   );
 
@@ -204,7 +194,6 @@ test("maps semantic methods to authenticated API requests", async () => {
   assert.equal(uploadHeaders.get("x-api-key"), "test-key");
   assert.equal(uploadHeaders.get("x-correlation-id"), "request-1");
   assert.equal(JSON.parse(requests[1].init.body).type, "image");
-  assert.equal(JSON.parse(requests[6].init.body).type, "image");
 });
 
 test("auto-paginates job listings", async () => {

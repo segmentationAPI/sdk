@@ -1,11 +1,15 @@
 import type { DashboardApi } from "../../generated/src/apis/DashboardApi.js";
 import type { DashboardAccount } from "../../generated/src/models/DashboardAccount.js";
 import type { DashboardOverview } from "../../generated/src/models/DashboardOverview.js";
+import type { DashboardAccessOverview } from "../../generated/src/models/DashboardAccessOverview.js";
+import type { DashboardTrialOverview } from "../../generated/src/models/DashboardTrialOverview.js";
 import { caughtErrorSchema, normalizeError } from "../errors.js";
 import { createInitOverride, type RequestOptions } from "../request-options.js";
 
 export type AccountDetails = DashboardAccount;
 export type AccountOverview = DashboardOverview;
+export type AccessOverview = DashboardAccessOverview;
+export type TrialOverview = DashboardTrialOverview;
 
 export class Account {
   readonly overview: AccountOverviewResource;

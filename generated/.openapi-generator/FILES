@@ -1,10 +1,10 @@
 src/apis/DashboardApi.ts
 src/apis/JobsApi.ts
-src/apis/PlaygroundApi.ts
 src/apis/UploadsApi.ts
 src/models/ApiError.ts
 src/models/AsyncAcceptedResponse.ts
 src/models/AsyncJobStatusResponse.ts
+src/models/DashboardAccessOverview.ts
 src/models/DashboardAccount.ts
 src/models/DashboardApiKey.ts
 src/models/DashboardApiKeyList.ts
@@ -14,6 +14,7 @@ src/models/DashboardBillingUrl.ts
 src/models/DashboardCreateApiKeyRequest.ts
 src/models/DashboardCreateApiKeyResponse.ts
 src/models/DashboardOverview.ts
+src/models/DashboardTrialOverview.ts
 src/models/ImageJobCreateRequest.ts
 src/models/ImageMask.ts
 src/models/ImageOutputItem.ts
@@ -26,11 +27,11 @@ src/models/JobStatus.ts
 src/models/JobSummary.ts
 src/models/JobTaskStatus.ts
 src/models/OutputManifest.ts
-src/models/PlaygroundJobCreateRequest.ts
 src/models/PresignUploadRequest.ts
 src/models/PresignUploadResponse.ts
 src/models/ProcessingMode.ts
 src/models/ResultAsset.ts
+src/models/TrialAcceptedOverview.ts
 src/models/VideoJobCreateRequest.ts
 src/models/VideoOutputCounts.ts
 src/models/VideoOutputItem.ts

@@ -3,7 +3,12 @@ export type { SegmentationAPIOptions } from "./client.js";
 export { APIConnectionError, APIError, APITimeoutError } from "./errors.js";
 export type { APIErrorBody } from "./errors.js";
 export type { RequestOptions } from "./request-options.js";
-export type { AccountDetails, AccountOverview } from "./resources/account.js";
+export type {
+  AccessOverview,
+  AccountDetails,
+  AccountOverview,
+  TrialOverview,
+} from "./resources/account.js";
 export type {
   APIKey,
   APIKeyCreateParams,
@@ -22,10 +27,12 @@ export type {
   JobType,
   ProcessingMode,
 } from "./resources/jobs.js";
-export type { PlaygroundJobCreateParams } from "./resources/playground.js";
 export type { Upload } from "./resources/uploads.js";
 
 export type { AsyncAcceptedResponse } from "../generated/src/models/AsyncAcceptedResponse.js";
+export type { DashboardAccessOverview } from "../generated/src/models/DashboardAccessOverview.js";
+export type { DashboardTrialOverview } from "../generated/src/models/DashboardTrialOverview.js";
+export type { TrialAcceptedOverview } from "../generated/src/models/TrialAcceptedOverview.js";
 export type { ImageJobCreateRequest } from "../generated/src/models/ImageJobCreateRequest.js";
 export type { ImageMask } from "../generated/src/models/ImageMask.js";
 export type { ImageOutputItem } from "../generated/src/models/ImageOutputItem.js";

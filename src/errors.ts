@@ -5,6 +5,12 @@ const responseBodySchema = z.json();
 const structuredErrorBodySchema = z.object({
   error: z.string().optional(),
   message: z.string().optional(),
+  remainingTokens: z.number().int().nonnegative().optional(),
+  requestedTokens: z.number().int().positive().optional(),
+  expiresAt: z.string().optional(),
+  activeJobId: z.string().optional(),
+  upgradeUrl: z.string().url().optional(),
+  retryAfterSeconds: z.number().int().positive().optional(),
 });
 
 export const caughtErrorSchema = z.union([
@@ -15,6 +21,12 @@ export type APIErrorBody = z.infer<typeof responseBodySchema> | undefined;
 
 export class APIError extends Error {
   override readonly name = "APIError";
+  readonly remainingTokens: number | undefined;
+  readonly requestedTokens: number | undefined;
+  readonly expiresAt: string | undefined;
+  readonly activeJobId: string | undefined;
+  readonly upgradeUrl: string | undefined;
+  readonly retryAfterSeconds: number | undefined;
 
   constructor(
     message: string,
@@ -24,6 +36,13 @@ export class APIError extends Error {
     readonly headers: Headers,
   ) {
     super(message);
+    const structured = structuredErrorBodySchema.safeParse(body);
+    this.remainingTokens = structured.success ? structured.data.remainingTokens : undefined;
+    this.requestedTokens = structured.success ? structured.data.requestedTokens : undefined;
+    this.expiresAt = structured.success ? structured.data.expiresAt : undefined;
+    this.activeJobId = structured.success ? structured.data.activeJobId : undefined;
+    this.upgradeUrl = structured.success ? structured.data.upgradeUrl : undefined;
+    this.retryAfterSeconds = structured.success ? structured.data.retryAfterSeconds : undefined;
   }
 }
 

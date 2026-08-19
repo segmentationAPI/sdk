@@ -38,8 +38,14 @@ const client = new SegmentationAPI({
 ```
 
 Both authentication modes use the same API routes and semantic resources:
-`client.jobs`, `client.uploads`, and `client.playground`. Account, billing, and
+`client.jobs` and `client.uploads`. Account, billing, and
 API-key management require a bearer access token.
+
+New accounts receive 100 free image tokens without a card. The 14-day period
+starts when the first production job is accepted. A job may contain up to three
+JPEG, PNG, or WebP images; video requires paid access. Only successfully
+processed images consume tokens, and the quota is approximate under concurrent
+requests. All processing uses `client.jobs.create()`.
 
 The client uses a 60-second request timeout by default. You can configure a
 different timeout, API base URL, Fetch implementation, or default headers in
@@ -116,6 +122,8 @@ const checkout = await client.billing.checkout.create({
 
 HTTP failures throw `APIError`, with `status`, `code`, `body`, and `headers`.
 Network and timeout failures throw `APIConnectionError` and `APITimeoutError`.
+Trial errors also expose `remainingTokens`, `requestedTokens`, `expiresAt`,
+`activeJobId`, `upgradeUrl`, and `retryAfterSeconds` when supplied by the API.
 
 ```ts
 import { APIError } from "@segmentationapi/sdk";

@@ -1,6 +1,5 @@
 import { DashboardApi } from "../generated/src/apis/DashboardApi.js";
 import { JobsApi } from "../generated/src/apis/JobsApi.js";
-import { PlaygroundApi } from "../generated/src/apis/PlaygroundApi.js";
 import { UploadsApi } from "../generated/src/apis/UploadsApi.js";
 import { Configuration } from "../generated/src/runtime.js";
 import { z } from "zod";
@@ -8,7 +7,6 @@ import { Account } from "./resources/account.js";
 import { APIKeys } from "./resources/api-keys.js";
 import { Billing } from "./resources/billing.js";
 import { Jobs } from "./resources/jobs.js";
-import { Playground } from "./resources/playground.js";
 import { Uploads } from "./resources/uploads.js";
 
 const DEFAULT_BASE_URL = "https://api.segmentationapi.com";
@@ -49,7 +47,6 @@ export class SegmentationAPI {
   readonly apiKeys: APIKeys;
   readonly billing: Billing;
   readonly jobs: Jobs;
-  readonly playground: Playground;
   readonly uploads: Uploads;
 
   private readonly requestControllers = new Set<AbortController>();
@@ -75,7 +72,6 @@ export class SegmentationAPI {
     this.apiKeys = new APIKeys(dashboardApi, timeout);
     this.billing = new Billing(dashboardApi, timeout);
     this.jobs = new Jobs(new JobsApi(configuration), timeout);
-    this.playground = new Playground(new PlaygroundApi(configuration), timeout);
     this.uploads = new Uploads(new UploadsApi(configuration), timeout);
   }
 
