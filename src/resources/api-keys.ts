@@ -2,7 +2,7 @@ import type { DashboardApi } from "../../generated/src/apis/DashboardApi.js";
 import type { DashboardApiKey } from "../../generated/src/models/DashboardApiKey.js";
 import type { DashboardCreateApiKeyRequest } from "../../generated/src/models/DashboardCreateApiKeyRequest.js";
 import type { DashboardCreateApiKeyResponse } from "../../generated/src/models/DashboardCreateApiKeyResponse.js";
-import { normalizeError } from "../errors.js";
+import { caughtErrorSchema, normalizeError } from "../errors.js";
 import { createInitOverride, type RequestOptions } from "../request-options.js";
 
 export type APIKey = DashboardApiKey;
@@ -26,7 +26,7 @@ export class APIKeys {
       );
       return response.items;
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 
@@ -43,7 +43,7 @@ export class APIKeys {
         createInitOverride(options, this.defaultTimeout),
       );
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 
@@ -55,7 +55,7 @@ export class APIKeys {
       );
       return response.apiKey;
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }

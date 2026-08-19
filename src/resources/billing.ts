@@ -1,7 +1,7 @@
 import type { DashboardApi } from "../../generated/src/apis/DashboardApi.js";
 import type { DashboardBillingOverview } from "../../generated/src/models/DashboardBillingOverview.js";
 import type { DashboardBillingUrl } from "../../generated/src/models/DashboardBillingUrl.js";
-import { normalizeError } from "../errors.js";
+import { caughtErrorSchema, normalizeError } from "../errors.js";
 import { createInitOverride } from "../request-options.js";
 import type { IdempotentRequestOptions } from "./api-keys.js";
 
@@ -31,7 +31,7 @@ export class BillingCheckout {
         createInitOverride(options, this.defaultTimeout),
       );
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }
@@ -49,7 +49,7 @@ export class BillingPortal {
         createInitOverride(options, this.defaultTimeout),
       );
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }

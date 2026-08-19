@@ -8,15 +8,15 @@ const { APIConnectionError, APIError, APITimeoutError, SegmentationAPI } = sdk;
 test("exposes a semantic resource hierarchy and keeps generated internals private", () => {
   const client = new SegmentationAPI({ apiKey: "test-key", timeout: 0 });
 
-  assert.equal(typeof client.jobs.create, "function");
-  assert.equal(typeof client.jobs.results.retrieve, "function");
-  assert.equal(typeof client.jobs.downloads.create, "function");
-  assert.equal(typeof client.playground.jobs.create, "function");
-  assert.equal(typeof client.uploads.create, "function");
-  assert.equal(typeof client.account.retrieve, "function");
-  assert.equal(typeof client.account.overview.retrieve, "function");
-  assert.equal(typeof client.apiKeys.create, "function");
-  assert.equal(typeof client.billing.checkout.create, "function");
+  assert.ok(client.jobs.create instanceof Function);
+  assert.ok(client.jobs.results.retrieve instanceof Function);
+  assert.ok(client.jobs.downloads.create instanceof Function);
+  assert.ok(client.playground.jobs.create instanceof Function);
+  assert.ok(client.uploads.create instanceof Function);
+  assert.ok(client.account.retrieve instanceof Function);
+  assert.ok(client.account.overview.retrieve instanceof Function);
+  assert.ok(client.apiKeys.create instanceof Function);
+  assert.ok(client.billing.checkout.create instanceof Function);
   assert.equal("JobsApi" in sdk, false);
   assert.equal("Configuration" in sdk, false);
 });

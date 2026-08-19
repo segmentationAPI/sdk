@@ -2,16 +2,20 @@ import type { JobsApi } from "../../generated/src/apis/JobsApi.js";
 import type { AsyncAcceptedResponse } from "../../generated/src/models/AsyncAcceptedResponse.js";
 import type { JobCreateRequest } from "../../generated/src/models/JobCreateRequest.js";
 import type { JobDownloadResponse } from "../../generated/src/models/JobDownloadResponse.js";
-import type { JobResultResponse } from "../../generated/src/models/JobResultResponse.js";
 import type { JobSummary as GeneratedJobSummary } from "../../generated/src/models/JobSummary.js";
 import type { OutputManifest } from "../../generated/src/models/OutputManifest.js";
 import type { ResultAsset } from "../../generated/src/models/ResultAsset.js";
-import { normalizeError } from "../errors.js";
+import { z } from "zod";
+import { caughtErrorSchema, normalizeError } from "../errors.js";
 import { createInitOverride, type RequestOptions } from "../request-options.js";
 
 export type JobType = "image" | "video";
 export type JobStatus = "queued" | "processing" | "success" | "failed";
 export type ProcessingMode = "single" | "batch" | "video";
+
+const jobTypeSchema = z.enum(["image", "video"]);
+const jobStatusSchema = z.enum(["queued", "processing", "success", "failed"]);
+const processingModeSchema = z.enum(["single", "batch", "video"]);
 
 export interface JobSummary {
   jobId: string;
@@ -75,7 +79,7 @@ export class Jobs {
         createInitOverride(options, this.defaultTimeout),
       );
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 
@@ -98,7 +102,7 @@ export class Jobs {
           this.list({ ...params, nextToken: token }, nextOptions ?? options),
       );
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 
@@ -110,7 +114,7 @@ export class Jobs {
       );
       return normalizeJob(response);
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }
@@ -152,13 +156,12 @@ export class JobResults {
 
   async retrieve(jobId: string, options?: RequestOptions): Promise<JobResult> {
     try {
-      const response = await this.api.retrieveJobResult(
+      return await this.api.retrieveJobResult(
         { jobId },
         createInitOverride(options, this.defaultTimeout),
       );
-      return response as JobResultResponse;
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }
@@ -176,7 +179,7 @@ export class JobDownloads {
         createInitOverride(options, this.defaultTimeout),
       );
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 
@@ -187,32 +190,36 @@ export class JobDownloads {
         createInitOverride(options, this.defaultTimeout),
       );
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }
 
 function normalizeJobSummary(job: GeneratedJobSummary): JobSummary {
-  return {
+  const summary: JobSummary = {
     jobId: job.jobId,
-    type: job.type as JobType,
-    processingMode: job.processingMode as ProcessingMode,
+    type: jobTypeSchema.parse(job.type),
+    processingMode: processingModeSchema.parse(job.processingMode),
     totalItems: job.totalItems,
-    status: job.status as JobStatus,
+    status: jobStatusSchema.parse(job.status),
     createdAt: toDate(job.createdAt),
     updatedAt: toDate(job.updatedAt),
-    ...(job.error !== undefined ? { error: job.error } : {}),
   };
+  if (job.error !== undefined) summary.error = job.error;
+  return summary;
 }
 
 function normalizeJob(job: Awaited<ReturnType<JobsApi["retrieveJob"]>>): Job {
   return {
     ...normalizeJobSummary(job),
-    tasks: job.tasks.map((task) => ({
-      taskId: task.taskId,
-      status: task.status as JobStatus,
-      ...(task.error !== undefined ? { error: task.error } : {}),
-    })),
+    tasks: job.tasks.map((task) => {
+      const normalizedTask: JobTask = {
+        taskId: task.taskId,
+        status: jobStatusSchema.parse(task.status),
+      };
+      if (task.error !== undefined) normalizedTask.error = task.error;
+      return normalizedTask;
+    }),
   };
 }
 

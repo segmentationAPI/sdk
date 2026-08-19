@@ -1,7 +1,7 @@
 import type { DashboardApi } from "../../generated/src/apis/DashboardApi.js";
 import type { DashboardAccount } from "../../generated/src/models/DashboardAccount.js";
 import type { DashboardOverview } from "../../generated/src/models/DashboardOverview.js";
-import { normalizeError } from "../errors.js";
+import { caughtErrorSchema, normalizeError } from "../errors.js";
 import { createInitOverride, type RequestOptions } from "../request-options.js";
 
 export type AccountDetails = DashboardAccount;
@@ -21,7 +21,7 @@ export class Account {
     try {
       return await this.api.getDashboardAccount(createInitOverride(options, this.defaultTimeout));
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }
@@ -36,7 +36,7 @@ export class AccountOverviewResource {
     try {
       return await this.api.getDashboardOverview(createInitOverride(options, this.defaultTimeout));
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }

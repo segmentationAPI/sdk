@@ -1,6 +1,7 @@
 export { SegmentationAPI } from "./client.js";
 export type { SegmentationAPIOptions } from "./client.js";
 export { APIConnectionError, APIError, APITimeoutError } from "./errors.js";
+export type { APIErrorBody } from "./errors.js";
 export type { RequestOptions } from "./request-options.js";
 export type { AccountDetails, AccountOverview } from "./resources/account.js";
 export type {

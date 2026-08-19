@@ -3,6 +3,7 @@ import { JobsApi } from "../generated/src/apis/JobsApi.js";
 import { PlaygroundApi } from "../generated/src/apis/PlaygroundApi.js";
 import { UploadsApi } from "../generated/src/apis/UploadsApi.js";
 import { Configuration } from "../generated/src/runtime.js";
+import { z } from "zod";
 import { Account } from "./resources/account.js";
 import { APIKeys } from "./resources/api-keys.js";
 import { Billing } from "./resources/billing.js";
@@ -12,6 +13,7 @@ import { Uploads } from "./resources/uploads.js";
 
 const DEFAULT_BASE_URL = "https://api.segmentationapi.com";
 const DEFAULT_TIMEOUT = 60_000;
+const credentialSchema = z.union([z.string().trim().min(1), z.function()]);
 
 type Credential = string | (() => string | Promise<string>);
 
@@ -115,7 +117,7 @@ function validateAuth(options: SegmentationAPIOptions): void {
   }
 
   const credential = hasApiKey ? options.apiKey : options.accessToken;
-  if (typeof credential === "string" && credential.trim().length === 0) {
+  if (!credentialSchema.safeParse(credential).success) {
     throw new TypeError(`${hasApiKey ? "apiKey" : "accessToken"} must not be empty`);
   }
 }

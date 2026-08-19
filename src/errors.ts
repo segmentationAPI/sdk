@@ -1,4 +1,17 @@
 import { FetchError, ResponseError } from "../generated/src/runtime.js";
+import { z } from "zod";
+
+const responseBodySchema = z.json();
+const structuredErrorBodySchema = z.object({
+  error: z.string().optional(),
+  message: z.string().optional(),
+});
+
+export const caughtErrorSchema = z.union([
+  z.instanceof(Error),
+  z.unknown().transform((cause) => new Error("Unexpected non-Error thrown", { cause })),
+]);
+export type APIErrorBody = z.infer<typeof responseBodySchema> | undefined;
 
 export class APIError extends Error {
   override readonly name = "APIError";
@@ -7,7 +20,7 @@ export class APIError extends Error {
     message: string,
     readonly status: number,
     readonly code: string | undefined,
-    readonly body: unknown,
+    readonly body: APIErrorBody,
     readonly headers: Headers,
   ) {
     super(message);
@@ -26,12 +39,13 @@ export class APITimeoutError extends APIConnectionError {
   override readonly name = "APITimeoutError";
 }
 
-export async function normalizeError(error: unknown): Promise<never> {
+export async function normalizeError(error: Error): Promise<never> {
   if (error instanceof ResponseError) {
     const body = await readResponseBody(error.response);
-    const code = getStringProperty(body, "error");
+    const bodyResult = structuredErrorBodySchema.safeParse(body);
+    const code = bodyResult.success ? bodyResult.data.error : undefined;
     const message =
-      getStringProperty(body, "message") ??
+      (bodyResult.success ? bodyResult.data.message : undefined) ??
       code ??
       `Request failed with status ${error.response.status}`;
 
@@ -47,21 +61,13 @@ export async function normalizeError(error: unknown): Promise<never> {
   throw error;
 }
 
-async function readResponseBody(response: Response): Promise<unknown> {
+async function readResponseBody(response: Response): Promise<APIErrorBody> {
   const contentType = response.headers.get("content-type") ?? "";
 
   try {
-    return contentType.includes("json") ? await response.json() : await response.text();
+    if (!contentType.includes("json")) return await response.text();
+    return responseBodySchema.parse(await response.json());
   } catch {
     return undefined;
   }
-}
-
-function getStringProperty(value: unknown, property: string): string | undefined {
-  if (typeof value !== "object" || value === null) {
-    return undefined;
-  }
-
-  const propertyValue = Reflect.get(value, property);
-  return typeof propertyValue === "string" ? propertyValue : undefined;
 }

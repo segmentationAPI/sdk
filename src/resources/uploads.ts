@@ -1,6 +1,6 @@
 import type { UploadsApi } from "../../generated/src/apis/UploadsApi.js";
 import type { PresignUploadRequest } from "../../generated/src/models/PresignUploadRequest.js";
-import { normalizeError } from "../errors.js";
+import { caughtErrorSchema, normalizeError } from "../errors.js";
 import { createInitOverride, type RequestOptions } from "../request-options.js";
 
 export interface Upload {
@@ -23,7 +23,7 @@ export class Uploads {
         createInitOverride(options, this.defaultTimeout),
       );
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }

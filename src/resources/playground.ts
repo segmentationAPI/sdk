@@ -1,7 +1,7 @@
 import type { PlaygroundApi } from "../../generated/src/apis/PlaygroundApi.js";
 import type { AsyncAcceptedResponse } from "../../generated/src/models/AsyncAcceptedResponse.js";
 import type { PlaygroundJobCreateRequest } from "../../generated/src/models/PlaygroundJobCreateRequest.js";
-import { normalizeError } from "../errors.js";
+import { caughtErrorSchema, normalizeError } from "../errors.js";
 import { createInitOverride, type RequestOptions } from "../request-options.js";
 
 export type PlaygroundJobCreateParams = Omit<PlaygroundJobCreateRequest, "type">;
@@ -30,7 +30,7 @@ export class PlaygroundJobs {
         createInitOverride(options, this.defaultTimeout),
       );
     } catch (error) {
-      return normalizeError(error);
+      return normalizeError(caughtErrorSchema.parse(error));
     }
   }
 }
