@@ -26,6 +26,7 @@ export interface PresignUploadResponse {
      */
     uploadUrl: string;
     /**
+     * Opaque upload id. Includes the file extension so create-job can address the object without listing the inputs prefix (for example a1b2c3d4-e5f6-7890-abcd-ef1234567890.png).
      * 
      * @type {string}
      * @memberof PresignUploadResponse

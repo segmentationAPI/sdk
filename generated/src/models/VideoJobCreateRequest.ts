@@ -62,7 +62,7 @@ export interface VideoJobCreateRequest {
      */
     maxFrames?: number;
     /**
-     * 
+     * Single task id returned by POST /v1/uploads/presign.
      * @type {Array<string>}
      * @memberof VideoJobCreateRequest
      */

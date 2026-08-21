@@ -50,7 +50,7 @@ export interface ImageJobCreateRequest {
      */
     maskThreshold?: number;
     /**
-     * 
+     * Task ids returned by POST /v1/uploads/presign.
      * @type {Array<string>}
      * @memberof ImageJobCreateRequest
      */
