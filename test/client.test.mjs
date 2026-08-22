@@ -191,7 +191,7 @@ test("maps semantic methods to authenticated API requests", async () => {
   );
 
   const uploadHeaders = new Headers(requests[0].init.headers);
-  assert.equal(uploadHeaders.get("x-api-key"), "test-key");
+  assert.equal(uploadHeaders.get("authorization"), "Bearer test-key");
   assert.equal(uploadHeaders.get("x-correlation-id"), "request-1");
   assert.equal(JSON.parse(requests[1].init.body).type, "image");
 });

@@ -59,8 +59,7 @@ export class SegmentationAPI {
     }
 
     const configuration = new Configuration({
-      apiKey: options.apiKey,
-      accessToken: options.accessToken,
+      accessToken: options.accessToken ?? options.apiKey,
       basePath: normalizeBaseURL(options.baseURL ?? DEFAULT_BASE_URL),
       fetchApi: this.createFetch(options.fetch ?? globalThis.fetch, options.onUnauthorized),
       headers: options.defaultHeaders,
