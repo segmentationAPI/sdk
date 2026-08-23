@@ -1,18 +1,18 @@
-import type { DashboardApi } from "../../generated/src/apis/DashboardApi.js";
-import type { DashboardBillingOverview } from "../../generated/src/models/DashboardBillingOverview.js";
-import type { DashboardBillingUrl } from "../../generated/src/models/DashboardBillingUrl.js";
+import type { BillingApi } from "../../generated/src/apis/BillingApi.js";
+import type { BillingOverview } from "../../generated/src/models/BillingOverview.js";
+import type { BillingUrl } from "../../generated/src/models/BillingUrl.js";
 import { caughtErrorSchema, normalizeError } from "../errors.js";
 import { createInitOverride } from "../request-options.js";
 import type { IdempotentRequestOptions } from "./api-keys.js";
 
-export type BillingOverview = DashboardBillingOverview;
-export type BillingSession = DashboardBillingUrl;
+export type { BillingOverview };
+export type BillingSession = BillingUrl;
 
 export class Billing {
   readonly checkout: BillingCheckout;
   readonly portal: BillingPortal;
 
-  constructor(api: DashboardApi, defaultTimeout: number) {
+  constructor(api: BillingApi, defaultTimeout: number) {
     this.checkout = new BillingCheckout(api, defaultTimeout);
     this.portal = new BillingPortal(api, defaultTimeout);
   }
@@ -20,13 +20,13 @@ export class Billing {
 
 export class BillingCheckout {
   constructor(
-    private readonly api: DashboardApi,
+    private readonly api: BillingApi,
     private readonly defaultTimeout: number,
   ) {}
 
   async create(options: IdempotentRequestOptions): Promise<BillingSession> {
     try {
-      return await this.api.createDashboardCheckout(
+      return await this.api.createCheckout(
         { idempotencyKey: options.idempotencyKey },
         createInitOverride(options, this.defaultTimeout),
       );
@@ -38,13 +38,13 @@ export class BillingCheckout {
 
 export class BillingPortal {
   constructor(
-    private readonly api: DashboardApi,
+    private readonly api: BillingApi,
     private readonly defaultTimeout: number,
   ) {}
 
   async create(options: IdempotentRequestOptions): Promise<BillingSession> {
     try {
-      return await this.api.createDashboardBillingPortal(
+      return await this.api.createBillingPortal(
         { idempotencyKey: options.idempotencyKey },
         createInitOverride(options, this.defaultTimeout),
       );

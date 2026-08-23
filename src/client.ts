@@ -1,4 +1,6 @@
-import { DashboardApi } from "../generated/src/apis/DashboardApi.js";
+import { AccountApi } from "../generated/src/apis/AccountApi.js";
+import { ApiKeysApi } from "../generated/src/apis/ApiKeysApi.js";
+import { BillingApi } from "../generated/src/apis/BillingApi.js";
 import { JobsApi } from "../generated/src/apis/JobsApi.js";
 import { UploadsApi } from "../generated/src/apis/UploadsApi.js";
 import { Configuration } from "../generated/src/runtime.js";
@@ -65,11 +67,13 @@ export class SegmentationAPI {
       headers: options.defaultHeaders,
     });
 
-    const dashboardApi = new DashboardApi(configuration);
+    const accountApi = new AccountApi(configuration);
+    const apiKeysApi = new ApiKeysApi(configuration);
+    const billingApi = new BillingApi(configuration);
 
-    this.account = new Account(dashboardApi, timeout);
-    this.apiKeys = new APIKeys(dashboardApi, timeout);
-    this.billing = new Billing(dashboardApi, timeout);
+    this.account = new Account(accountApi, timeout);
+    this.apiKeys = new APIKeys(apiKeysApi, timeout);
+    this.billing = new Billing(billingApi, timeout);
     this.jobs = new Jobs(new JobsApi(configuration), timeout);
     this.uploads = new Uploads(new UploadsApi(configuration), timeout);
   }

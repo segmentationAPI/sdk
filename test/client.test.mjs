@@ -30,30 +30,29 @@ test("uses the same semantic resources with bearer-token authentication", async 
       requests.push({ url, init });
       const { pathname } = new URL(url);
 
-      if (pathname === "/v1/dashboard/me") {
+      if (pathname === "/v1/account") {
         return json({
           accountId: "account-1",
           email: "user@example.test",
           emailVerified: true,
           image: null,
           name: "Example User",
-          resolution: "mapped",
           status: "active",
         });
       }
-      if (pathname === "/v1/dashboard/overview") {
+      if (pathname === "/v1/account/overview") {
         return json({ tokenUsageLast24h: 12, billing: { accessStatus: "allowed" } });
       }
-      if (pathname === "/v1/dashboard/api-keys" && init.method === "GET") {
+      if (pathname === "/v1/api-keys" && init.method === "GET") {
         return json({ items: [apiKey()] });
       }
-      if (pathname === "/v1/dashboard/api-keys" && init.method === "POST") {
+      if (pathname === "/v1/api-keys" && init.method === "POST") {
         return json({ apiKey: apiKey(), secret: "secret", secretUnavailable: false }, 201);
       }
-      if (pathname === "/v1/dashboard/api-keys/key-1") {
+      if (pathname === "/v1/api-keys/key-1") {
         return json({ apiKey: apiKey({ revoked: true }) });
       }
-      if (pathname.startsWith("/v1/dashboard/billing/")) {
+      if (pathname.startsWith("/v1/billing/")) {
         return json({ url: "https://billing.example.test" }, 201);
       }
       if (pathname === "/v1/uploads/presign") {

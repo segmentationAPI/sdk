@@ -38,8 +38,8 @@ const client = new SegmentationAPI({
 ```
 
 Both authentication modes use the same API routes and semantic resources:
-`client.jobs` and `client.uploads`. Account, billing, and
-API-key management require a bearer access token.
+`client.jobs`, `client.uploads`, `client.account`, `client.apiKeys`, and
+`client.billing`. A live `sk_live_...` key is an unrestricted Account secret.
 
 New accounts receive 100 free image tokens without a card. The 14-day period
 starts when the first production job is accepted. A job may contain up to three
@@ -103,8 +103,7 @@ for await (const job of firstPage) {
 
 ## Account and API keys
 
-Authenticated account consumers can use the same SDK for account, billing, and
-API-key management:
+The same SDK manages the Account with either an API key or an access token:
 
 ```ts
 const account = await client.account.retrieve();

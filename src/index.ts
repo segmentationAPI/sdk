@@ -30,8 +30,6 @@ export type {
 export type { Upload } from "./resources/uploads.js";
 
 export type { AsyncAcceptedResponse } from "../generated/src/models/AsyncAcceptedResponse.js";
-export type { DashboardAccessOverview } from "../generated/src/models/DashboardAccessOverview.js";
-export type { DashboardTrialOverview } from "../generated/src/models/DashboardTrialOverview.js";
 export type { TrialAcceptedOverview } from "../generated/src/models/TrialAcceptedOverview.js";
 export type { ImageJobCreateRequest } from "../generated/src/models/ImageJobCreateRequest.js";
 export type { ImageMask } from "../generated/src/models/ImageMask.js";

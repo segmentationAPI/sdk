@@ -1,13 +1,13 @@
-import type { DashboardApi } from "../../generated/src/apis/DashboardApi.js";
-import type { DashboardApiKey } from "../../generated/src/models/DashboardApiKey.js";
-import type { DashboardCreateApiKeyRequest } from "../../generated/src/models/DashboardCreateApiKeyRequest.js";
-import type { DashboardCreateApiKeyResponse } from "../../generated/src/models/DashboardCreateApiKeyResponse.js";
+import type { ApiKeysApi } from "../../generated/src/apis/ApiKeysApi.js";
+import type { ApiKey } from "../../generated/src/models/ApiKey.js";
+import type { CreateApiKeyRequest } from "../../generated/src/models/CreateApiKeyRequest.js";
+import type { CreateApiKeyResponse } from "../../generated/src/models/CreateApiKeyResponse.js";
 import { caughtErrorSchema, normalizeError } from "../errors.js";
 import { createInitOverride, type RequestOptions } from "../request-options.js";
 
-export type APIKey = DashboardApiKey;
-export type APIKeyCreateParams = DashboardCreateApiKeyRequest;
-export type APIKeyCreateResult = DashboardCreateApiKeyResponse;
+export type APIKey = ApiKey;
+export type APIKeyCreateParams = CreateApiKeyRequest;
+export type APIKeyCreateResult = CreateApiKeyResponse;
 
 export interface IdempotentRequestOptions extends RequestOptions {
   idempotencyKey: string;
@@ -15,15 +15,13 @@ export interface IdempotentRequestOptions extends RequestOptions {
 
 export class APIKeys {
   constructor(
-    private readonly api: DashboardApi,
+    private readonly api: ApiKeysApi,
     private readonly defaultTimeout: number,
   ) {}
 
   async list(options?: RequestOptions): Promise<ReadonlyArray<APIKey>> {
     try {
-      const response = await this.api.listDashboardApiKeys(
-        createInitOverride(options, this.defaultTimeout),
-      );
+      const response = await this.api.listApiKeys(createInitOverride(options, this.defaultTimeout));
       return response.items;
     } catch (error) {
       return normalizeError(caughtErrorSchema.parse(error));
@@ -35,9 +33,9 @@ export class APIKeys {
     options: IdempotentRequestOptions,
   ): Promise<APIKeyCreateResult> {
     try {
-      return await this.api.createDashboardApiKey(
+      return await this.api.createApiKey(
         {
-          dashboardCreateApiKeyRequest: request,
+          createApiKeyRequest: request,
           idempotencyKey: options.idempotencyKey,
         },
         createInitOverride(options, this.defaultTimeout),
@@ -49,7 +47,7 @@ export class APIKeys {
 
   async revoke(keyId: string, options?: RequestOptions): Promise<APIKey> {
     try {
-      const response = await this.api.revokeDashboardApiKey(
+      const response = await this.api.revokeApiKey(
         { keyId },
         createInitOverride(options, this.defaultTimeout),
       );
