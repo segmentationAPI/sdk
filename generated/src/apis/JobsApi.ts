@@ -138,6 +138,7 @@ export class JobsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Queue an image or video segmentation job from previously uploaded task IDs and text prompts. The job runs asynchronously. Poll retrieveJob until status is success, then fetch masks with retrieveJobResult or createJobDownload. Auth is required; there is no anonymous API. 
      * Create an asynchronous segmentation job (image or video)
      */
     async createJobRaw(requestParameters: JobsApiCreateJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AsyncAcceptedResponse>> {
@@ -148,6 +149,7 @@ export class JobsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Queue an image or video segmentation job from previously uploaded task IDs and text prompts. The job runs asynchronously. Poll retrieveJob until status is success, then fetch masks with retrieveJobResult or createJobDownload. Auth is required; there is no anonymous API. 
      * Create an asynchronous segmentation job (image or video)
      */
     async createJob(requestParameters: JobsApiCreateJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AsyncAcceptedResponse> {
@@ -199,6 +201,7 @@ export class JobsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Start or reuse a zip archive of a successful job\'s outputs. Returns pending until the archive is built. The job must already be success; otherwise the API returns 409. 
      * Create or reuse an async job archive download
      */
     async createJobDownloadRaw(requestParameters: JobsApiCreateJobDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<JobDownloadResponse>> {
@@ -209,6 +212,7 @@ export class JobsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Start or reuse a zip archive of a successful job\'s outputs. Returns pending until the archive is built. The job must already be success; otherwise the API returns 409. 
      * Create or reuse an async job archive download
      */
     async createJobDownload(requestParameters: JobsApiCreateJobDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JobDownloadResponse> {
@@ -335,6 +339,7 @@ export class JobsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Return the current job status and per-task state. This response does not include masks. Poll until status is success or failed, then call retrieveJobResult or createJobDownload. 
      * Get async segmentation job status
      */
     async retrieveJobRaw(requestParameters: JobsApiRetrieveJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AsyncJobStatusResponse>> {
@@ -345,6 +350,7 @@ export class JobsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Return the current job status and per-task state. This response does not include masks. Poll until status is success or failed, then call retrieveJobResult or createJobDownload. 
      * Get async segmentation job status
      */
     async retrieveJob(requestParameters: JobsApiRetrieveJobRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AsyncJobStatusResponse> {
@@ -396,6 +402,7 @@ export class JobsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Poll an archive request started with createJobDownload. When status is ready, downloadUrl is a short-lived presigned zip containing output_manifest.json and mask artifacts. 
      * Get async job archive download status
      */
     async retrieveJobDownloadRaw(requestParameters: JobsApiRetrieveJobDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<JobDownloadResponse>> {
@@ -406,6 +413,7 @@ export class JobsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Poll an archive request started with createJobDownload. When status is ready, downloadUrl is a short-lived presigned zip containing output_manifest.json and mask artifacts. 
      * Get async job archive download status
      */
     async retrieveJobDownload(requestParameters: JobsApiRetrieveJobDownloadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JobDownloadResponse> {

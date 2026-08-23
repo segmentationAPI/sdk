@@ -84,6 +84,7 @@ export class UploadsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Request a short-lived S3 PUT URL and a task ID for an image or video file. PUT the bytes to uploadUrl with the same Content-Type, then pass the task ID to createJob. 
      * Create a presigned upload URL for an input file
      */
     async createUploadPresignRaw(requestParameters: UploadsApiCreateUploadPresignRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PresignUploadResponse>> {
@@ -94,6 +95,7 @@ export class UploadsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Request a short-lived S3 PUT URL and a task ID for an image or video file. PUT the bytes to uploadUrl with the same Content-Type, then pass the task ID to createJob. 
      * Create a presigned upload URL for an input file
      */
     async createUploadPresign(requestParameters: UploadsApiCreateUploadPresignRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PresignUploadResponse> {
