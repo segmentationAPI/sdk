@@ -1,6 +1,6 @@
 # Reference
 ## Uploads
-<details><summary><code>client.uploads.<a href="/src/api/resources/uploads/client/Client.ts">createUploadPresign</a>({ ...params }) -> SegmentationApi.PresignUploadResponse</code></summary>
+<details><summary><code>client.uploads.<a href="/src/api/resources/uploads/client/Client.ts">createUploadPresign</a>({ ...params }) -> SegmentationAPI.PresignUploadResponse</code></summary>
 <dl>
 <dd>
 
@@ -45,7 +45,7 @@ await client.uploads.createUploadPresign({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.PresignUploadRequest` 
+**request:** `SegmentationAPI.PresignUploadRequest` 
     
 </dd>
 </dl>
@@ -66,7 +66,7 @@ await client.uploads.createUploadPresign({
 </details>
 
 ## Jobs
-<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">listJobs</a>({ ...params }) -> SegmentationApi.JobListResponse</code></summary>
+<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">listJobs</a>({ ...params }) -> SegmentationAPI.JobListResponse</code></summary>
 <dl>
 <dd>
 
@@ -109,7 +109,7 @@ await client.jobs.listJobs();
 <dl>
 <dd>
 
-**request:** `SegmentationApi.ListJobsRequest` 
+**request:** `SegmentationAPI.ListJobsRequest` 
     
 </dd>
 </dl>
@@ -129,7 +129,7 @@ await client.jobs.listJobs();
 </dl>
 </details>
 
-<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">createJob</a>({ ...params }) -> SegmentationApi.AsyncAcceptedResponse</code></summary>
+<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">createJob</a>({ ...params }) -> SegmentationAPI.AsyncAcceptedResponse</code></summary>
 <dl>
 <dd>
 
@@ -176,7 +176,7 @@ await client.jobs.createJob({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.JobCreateRequest` 
+**request:** `SegmentationAPI.JobCreateRequest` 
     
 </dd>
 </dl>
@@ -196,7 +196,7 @@ await client.jobs.createJob({
 </dl>
 </details>
 
-<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">retrieveJob</a>({ ...params }) -> SegmentationApi.AsyncJobStatusResponse</code></summary>
+<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">retrieveJob</a>({ ...params }) -> SegmentationAPI.AsyncJobStatusResponse</code></summary>
 <dl>
 <dd>
 
@@ -241,7 +241,7 @@ await client.jobs.retrieveJob({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.RetrieveJobRequest` 
+**request:** `SegmentationAPI.RetrieveJobRequest` 
     
 </dd>
 </dl>
@@ -261,7 +261,7 @@ await client.jobs.retrieveJob({
 </dl>
 </details>
 
-<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">retrieveJobResult</a>({ ...params }) -> SegmentationApi.JobResultResponse</code></summary>
+<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">retrieveJobResult</a>({ ...params }) -> SegmentationAPI.JobResultResponse</code></summary>
 <dl>
 <dd>
 
@@ -306,7 +306,7 @@ await client.jobs.retrieveJobResult({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.RetrieveJobResultRequest` 
+**request:** `SegmentationAPI.RetrieveJobResultRequest` 
     
 </dd>
 </dl>
@@ -326,7 +326,7 @@ await client.jobs.retrieveJobResult({
 </dl>
 </details>
 
-<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">retrieveJobDownload</a>({ ...params }) -> SegmentationApi.JobDownloadResponse</code></summary>
+<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">retrieveJobDownload</a>({ ...params }) -> SegmentationAPI.JobDownloadResponse</code></summary>
 <dl>
 <dd>
 
@@ -371,7 +371,7 @@ await client.jobs.retrieveJobDownload({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.RetrieveJobDownloadRequest` 
+**request:** `SegmentationAPI.RetrieveJobDownloadRequest` 
     
 </dd>
 </dl>
@@ -391,7 +391,7 @@ await client.jobs.retrieveJobDownload({
 </dl>
 </details>
 
-<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">createJobDownload</a>({ ...params }) -> SegmentationApi.JobDownloadResponse</code></summary>
+<details><summary><code>client.jobs.<a href="/src/api/resources/jobs/client/Client.ts">createJobDownload</a>({ ...params }) -> SegmentationAPI.JobDownloadResponse</code></summary>
 <dl>
 <dd>
 
@@ -436,7 +436,7 @@ await client.jobs.createJobDownload({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.CreateJobDownloadRequest` 
+**request:** `SegmentationAPI.CreateJobDownloadRequest` 
     
 </dd>
 </dl>
@@ -457,7 +457,7 @@ await client.jobs.createJobDownload({
 </details>
 
 ## Account
-<details><summary><code>client.account.<a href="/src/api/resources/account/client/Client.ts">getAccount</a>() -> SegmentationApi.Account</code></summary>
+<details><summary><code>client.account.<a href="/src/api/resources/account/client/Client.ts">getAccount</a>() -> SegmentationAPI.Account</code></summary>
 <dl>
 <dd>
 
@@ -498,7 +498,7 @@ await client.account.getAccount();
 </dl>
 </details>
 
-<details><summary><code>client.account.<a href="/src/api/resources/account/client/Client.ts">getAccountOverview</a>() -> SegmentationApi.AccountOverview</code></summary>
+<details><summary><code>client.account.<a href="/src/api/resources/account/client/Client.ts">getAccountOverview</a>() -> SegmentationAPI.AccountOverview</code></summary>
 <dl>
 <dd>
 
@@ -540,7 +540,7 @@ await client.account.getAccountOverview();
 </details>
 
 ## ApiKeys
-<details><summary><code>client.apiKeys.<a href="/src/api/resources/apiKeys/client/Client.ts">listApiKeys</a>() -> SegmentationApi.ApiKeyList</code></summary>
+<details><summary><code>client.apiKeys.<a href="/src/api/resources/apiKeys/client/Client.ts">listApiKeys</a>() -> SegmentationAPI.ApiKeyList</code></summary>
 <dl>
 <dd>
 
@@ -581,7 +581,7 @@ await client.apiKeys.listApiKeys();
 </dl>
 </details>
 
-<details><summary><code>client.apiKeys.<a href="/src/api/resources/apiKeys/client/Client.ts">createApiKey</a>({ ...params }) -> SegmentationApi.CreateApiKeyResponse</code></summary>
+<details><summary><code>client.apiKeys.<a href="/src/api/resources/apiKeys/client/Client.ts">createApiKey</a>({ ...params }) -> SegmentationAPI.CreateApiKeyResponse</code></summary>
 <dl>
 <dd>
 
@@ -613,7 +613,7 @@ await client.apiKeys.createApiKey({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.CreateApiKeyRequest` 
+**request:** `SegmentationAPI.CreateApiKeyRequest` 
     
 </dd>
 </dl>
@@ -633,7 +633,7 @@ await client.apiKeys.createApiKey({
 </dl>
 </details>
 
-<details><summary><code>client.apiKeys.<a href="/src/api/resources/apiKeys/client/Client.ts">revokeApiKey</a>({ ...params }) -> SegmentationApi.ApiKeyMutation</code></summary>
+<details><summary><code>client.apiKeys.<a href="/src/api/resources/apiKeys/client/Client.ts">revokeApiKey</a>({ ...params }) -> SegmentationAPI.ApiKeyMutation</code></summary>
 <dl>
 <dd>
 
@@ -664,7 +664,7 @@ await client.apiKeys.revokeApiKey({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.RevokeApiKeyRequest` 
+**request:** `SegmentationAPI.RevokeApiKeyRequest` 
     
 </dd>
 </dl>
@@ -685,7 +685,7 @@ await client.apiKeys.revokeApiKey({
 </details>
 
 ## Billing
-<details><summary><code>client.billing.<a href="/src/api/resources/billing/client/Client.ts">createCheckout</a>({ ...params }) -> SegmentationApi.BillingUrl</code></summary>
+<details><summary><code>client.billing.<a href="/src/api/resources/billing/client/Client.ts">createCheckout</a>({ ...params }) -> SegmentationAPI.BillingUrl</code></summary>
 <dl>
 <dd>
 
@@ -716,7 +716,7 @@ await client.billing.createCheckout({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.CreateCheckoutRequest` 
+**request:** `SegmentationAPI.CreateCheckoutRequest` 
     
 </dd>
 </dl>
@@ -736,7 +736,7 @@ await client.billing.createCheckout({
 </dl>
 </details>
 
-<details><summary><code>client.billing.<a href="/src/api/resources/billing/client/Client.ts">createBillingPortal</a>({ ...params }) -> SegmentationApi.BillingUrl</code></summary>
+<details><summary><code>client.billing.<a href="/src/api/resources/billing/client/Client.ts">createBillingPortal</a>({ ...params }) -> SegmentationAPI.BillingUrl</code></summary>
 <dl>
 <dd>
 
@@ -767,7 +767,7 @@ await client.billing.createBillingPortal({
 <dl>
 <dd>
 
-**request:** `SegmentationApi.CreateBillingPortalRequest` 
+**request:** `SegmentationAPI.CreateBillingPortalRequest` 
     
 </dd>
 </dl>

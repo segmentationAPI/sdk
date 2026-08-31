@@ -8,7 +8,7 @@ import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import * as SegmentationApi from "../../../index.js";
+import * as SegmentationAPI from "../../../index.js";
 
 export declare namespace JobsClient {
     export type Options = BaseClientOptions;
@@ -26,29 +26,29 @@ export class JobsClient {
     /**
      * List async segmentation jobs for the authenticated account.
      *
-     * @param {SegmentationApi.ListJobsRequest} request
+     * @param {SegmentationAPI.ListJobsRequest} request
      * @param {JobsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.BadRequestError}
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link SegmentationApi.InternalServerError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.BadRequestError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link SegmentationAPI.InternalServerError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.jobs.listJobs()
      */
     public listJobs(
-        request: SegmentationApi.ListJobsRequest = {},
+        request: SegmentationAPI.ListJobsRequest = {},
         requestOptions?: JobsClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.JobListResponse> {
+    ): core.HttpResponsePromise<SegmentationAPI.JobListResponse> {
         return core.HttpResponsePromise.fromPromise(this.__listJobs(request, requestOptions));
     }
 
     private async __listJobs(
-        request: SegmentationApi.ListJobsRequest = {},
+        request: SegmentationAPI.ListJobsRequest = {},
         requestOptions?: JobsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.JobListResponse>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.JobListResponse>> {
         const { limit, nextToken, jobId, mode, status } = request;
         const _queryParams: Record<string, unknown> = {
             limit,
@@ -67,7 +67,7 @@ export class JobsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 "v1/jobs",
             ),
             method: "GET",
@@ -84,28 +84,28 @@ export class JobsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.JobListResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.JobListResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new SegmentationApi.BadRequestError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.BadRequestError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new SegmentationApi.InternalServerError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.InternalServerError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -119,19 +119,19 @@ export class JobsClient {
     /**
      * Queue an image or video segmentation job from previously uploaded task IDs and text prompts. The job runs asynchronously. Poll retrieveJob until status is success, then fetch masks with retrieveJobResult or createJobDownload. Auth is required; there is no anonymous API.
      *
-     * @param {SegmentationApi.JobCreateRequest} request
+     * @param {SegmentationAPI.JobCreateRequest} request
      * @param {JobsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.BadRequestError}
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link SegmentationApi.PaymentRequiredError}
-     * @throws {@link SegmentationApi.ForbiddenError}
-     * @throws {@link SegmentationApi.ConflictError}
-     * @throws {@link SegmentationApi.InternalServerError}
-     * @throws {@link SegmentationApi.BadGatewayError}
-     * @throws {@link SegmentationApi.ServiceUnavailableError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.BadRequestError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link SegmentationAPI.PaymentRequiredError}
+     * @throws {@link SegmentationAPI.ForbiddenError}
+     * @throws {@link SegmentationAPI.ConflictError}
+     * @throws {@link SegmentationAPI.InternalServerError}
+     * @throws {@link SegmentationAPI.BadGatewayError}
+     * @throws {@link SegmentationAPI.ServiceUnavailableError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.jobs.createJob({
@@ -141,16 +141,16 @@ export class JobsClient {
      *     })
      */
     public createJob(
-        request: SegmentationApi.JobCreateRequest,
+        request: SegmentationAPI.JobCreateRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.AsyncAcceptedResponse> {
+    ): core.HttpResponsePromise<SegmentationAPI.AsyncAcceptedResponse> {
         return core.HttpResponsePromise.fromPromise(this.__createJob(request, requestOptions));
     }
 
     private async __createJob(
-        request: SegmentationApi.JobCreateRequest,
+        request: SegmentationAPI.JobCreateRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.AsyncAcceptedResponse>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.AsyncAcceptedResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -161,7 +161,7 @@ export class JobsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 "v1/jobs",
             ),
             method: "POST",
@@ -178,7 +178,7 @@ export class JobsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as SegmentationApi.AsyncAcceptedResponse,
+                data: _response.body as SegmentationAPI.AsyncAcceptedResponse,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -186,47 +186,47 @@ export class JobsClient {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new SegmentationApi.BadRequestError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.BadRequestError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 402:
-                    throw new SegmentationApi.PaymentRequiredError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.PaymentRequiredError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 403:
-                    throw new SegmentationApi.ForbiddenError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.ForbiddenError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new SegmentationApi.ConflictError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.ConflictError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new SegmentationApi.InternalServerError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.InternalServerError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 502:
-                    throw new SegmentationApi.BadGatewayError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.BadGatewayError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 503:
-                    throw new SegmentationApi.ServiceUnavailableError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.ServiceUnavailableError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -240,14 +240,14 @@ export class JobsClient {
     /**
      * Return the current job status and per-task state. This response does not include masks. Poll until status is success or failed, then call retrieveJobResult or createJobDownload.
      *
-     * @param {SegmentationApi.RetrieveJobRequest} request
+     * @param {SegmentationAPI.RetrieveJobRequest} request
      * @param {JobsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link SegmentationApi.NotFoundError}
-     * @throws {@link SegmentationApi.InternalServerError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link SegmentationAPI.NotFoundError}
+     * @throws {@link SegmentationAPI.InternalServerError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.jobs.retrieveJob({
@@ -255,16 +255,16 @@ export class JobsClient {
      *     })
      */
     public retrieveJob(
-        request: SegmentationApi.RetrieveJobRequest,
+        request: SegmentationAPI.RetrieveJobRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.AsyncJobStatusResponse> {
+    ): core.HttpResponsePromise<SegmentationAPI.AsyncJobStatusResponse> {
         return core.HttpResponsePromise.fromPromise(this.__retrieveJob(request, requestOptions));
     }
 
     private async __retrieveJob(
-        request: SegmentationApi.RetrieveJobRequest,
+        request: SegmentationAPI.RetrieveJobRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.AsyncJobStatusResponse>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.AsyncJobStatusResponse>> {
         const { jobId } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -276,7 +276,7 @@ export class JobsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 `v1/jobs/${core.url.encodePathParam(jobId)}`,
             ),
             method: "GET",
@@ -290,7 +290,7 @@ export class JobsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as SegmentationApi.AsyncJobStatusResponse,
+                data: _response.body as SegmentationAPI.AsyncJobStatusResponse,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -298,22 +298,22 @@ export class JobsClient {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new SegmentationApi.NotFoundError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.NotFoundError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new SegmentationApi.InternalServerError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.InternalServerError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -327,15 +327,15 @@ export class JobsClient {
     /**
      * Returns the result manifest with short-lived signed URLs for owned output assets.
      *
-     * @param {SegmentationApi.RetrieveJobResultRequest} request
+     * @param {SegmentationAPI.RetrieveJobResultRequest} request
      * @param {JobsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link SegmentationApi.NotFoundError}
-     * @throws {@link SegmentationApi.ConflictError}
-     * @throws {@link SegmentationApi.InternalServerError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link SegmentationAPI.NotFoundError}
+     * @throws {@link SegmentationAPI.ConflictError}
+     * @throws {@link SegmentationAPI.InternalServerError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.jobs.retrieveJobResult({
@@ -343,16 +343,16 @@ export class JobsClient {
      *     })
      */
     public retrieveJobResult(
-        request: SegmentationApi.RetrieveJobResultRequest,
+        request: SegmentationAPI.RetrieveJobResultRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.JobResultResponse> {
+    ): core.HttpResponsePromise<SegmentationAPI.JobResultResponse> {
         return core.HttpResponsePromise.fromPromise(this.__retrieveJobResult(request, requestOptions));
     }
 
     private async __retrieveJobResult(
-        request: SegmentationApi.RetrieveJobResultRequest,
+        request: SegmentationAPI.RetrieveJobResultRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.JobResultResponse>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.JobResultResponse>> {
         const { jobId } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -364,7 +364,7 @@ export class JobsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 `v1/jobs/${core.url.encodePathParam(jobId)}/result`,
             ),
             method: "GET",
@@ -377,33 +377,33 @@ export class JobsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.JobResultResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.JobResultResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new SegmentationApi.NotFoundError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.NotFoundError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new SegmentationApi.ConflictError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.ConflictError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new SegmentationApi.InternalServerError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.InternalServerError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -417,15 +417,15 @@ export class JobsClient {
     /**
      * Poll an archive request started with createJobDownload. When status is ready, downloadUrl is a short-lived presigned zip containing output_manifest.json and mask artifacts.
      *
-     * @param {SegmentationApi.RetrieveJobDownloadRequest} request
+     * @param {SegmentationAPI.RetrieveJobDownloadRequest} request
      * @param {JobsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link SegmentationApi.NotFoundError}
-     * @throws {@link SegmentationApi.ConflictError}
-     * @throws {@link SegmentationApi.InternalServerError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link SegmentationAPI.NotFoundError}
+     * @throws {@link SegmentationAPI.ConflictError}
+     * @throws {@link SegmentationAPI.InternalServerError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.jobs.retrieveJobDownload({
@@ -433,16 +433,16 @@ export class JobsClient {
      *     })
      */
     public retrieveJobDownload(
-        request: SegmentationApi.RetrieveJobDownloadRequest,
+        request: SegmentationAPI.RetrieveJobDownloadRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.JobDownloadResponse> {
+    ): core.HttpResponsePromise<SegmentationAPI.JobDownloadResponse> {
         return core.HttpResponsePromise.fromPromise(this.__retrieveJobDownload(request, requestOptions));
     }
 
     private async __retrieveJobDownload(
-        request: SegmentationApi.RetrieveJobDownloadRequest,
+        request: SegmentationAPI.RetrieveJobDownloadRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.JobDownloadResponse>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.JobDownloadResponse>> {
         const { jobId } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -454,7 +454,7 @@ export class JobsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 `v1/jobs/${core.url.encodePathParam(jobId)}/download`,
             ),
             method: "GET",
@@ -467,33 +467,33 @@ export class JobsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.JobDownloadResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.JobDownloadResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new SegmentationApi.NotFoundError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.NotFoundError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new SegmentationApi.ConflictError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.ConflictError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new SegmentationApi.InternalServerError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.InternalServerError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -507,15 +507,15 @@ export class JobsClient {
     /**
      * Start or reuse a zip archive of a successful job's outputs. Returns pending until the archive is built. The job must already be success; otherwise the API returns 409.
      *
-     * @param {SegmentationApi.CreateJobDownloadRequest} request
+     * @param {SegmentationAPI.CreateJobDownloadRequest} request
      * @param {JobsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link SegmentationApi.NotFoundError}
-     * @throws {@link SegmentationApi.ConflictError}
-     * @throws {@link SegmentationApi.InternalServerError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link SegmentationAPI.NotFoundError}
+     * @throws {@link SegmentationAPI.ConflictError}
+     * @throws {@link SegmentationAPI.InternalServerError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.jobs.createJobDownload({
@@ -523,16 +523,16 @@ export class JobsClient {
      *     })
      */
     public createJobDownload(
-        request: SegmentationApi.CreateJobDownloadRequest,
+        request: SegmentationAPI.CreateJobDownloadRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.JobDownloadResponse> {
+    ): core.HttpResponsePromise<SegmentationAPI.JobDownloadResponse> {
         return core.HttpResponsePromise.fromPromise(this.__createJobDownload(request, requestOptions));
     }
 
     private async __createJobDownload(
-        request: SegmentationApi.CreateJobDownloadRequest,
+        request: SegmentationAPI.CreateJobDownloadRequest,
         requestOptions?: JobsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.JobDownloadResponse>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.JobDownloadResponse>> {
         const { jobId } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -544,7 +544,7 @@ export class JobsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 `v1/jobs/${core.url.encodePathParam(jobId)}/download`,
             ),
             method: "POST",
@@ -557,33 +557,33 @@ export class JobsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.JobDownloadResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.JobDownloadResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 404:
-                    throw new SegmentationApi.NotFoundError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.NotFoundError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 409:
-                    throw new SegmentationApi.ConflictError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.ConflictError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new SegmentationApi.InternalServerError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.InternalServerError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,

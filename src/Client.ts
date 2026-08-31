@@ -9,21 +9,21 @@ import type { BaseClientOptions, BaseRequestOptions } from "./BaseClient.js";
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "./BaseClient.js";
 import * as core from "./core/index.js";
 
-export declare namespace SegmentationApiClient {
+export declare namespace SegmentationAPIClient {
     export type Options = BaseClientOptions;
 
     export interface RequestOptions extends BaseRequestOptions {}
 }
 
-export class SegmentationApiClient {
-    protected readonly _options: NormalizedClientOptionsWithAuth<SegmentationApiClient.Options>;
+export class SegmentationAPIClient {
+    protected readonly _options: NormalizedClientOptionsWithAuth<SegmentationAPIClient.Options>;
     protected _uploads: UploadsClient | undefined;
     protected _jobs: JobsClient | undefined;
     protected _account: AccountClient | undefined;
     protected _apiKeys: ApiKeysClient | undefined;
     protected _billing: BillingClient | undefined;
 
-    constructor(options: SegmentationApiClient.Options) {
+    constructor(options: SegmentationAPIClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 

@@ -7,7 +7,7 @@ import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import * as SegmentationApi from "../../../index.js";
+import * as SegmentationAPI from "../../../index.js";
 
 export declare namespace BillingClient {
     export type Options = BaseClientOptions;
@@ -23,12 +23,12 @@ export class BillingClient {
     }
 
     /**
-     * @param {SegmentationApi.CreateCheckoutRequest} request
+     * @param {SegmentationAPI.CreateCheckoutRequest} request
      * @param {BillingClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.billing.createCheckout({
@@ -36,16 +36,16 @@ export class BillingClient {
      *     })
      */
     public createCheckout(
-        request: SegmentationApi.CreateCheckoutRequest,
+        request: SegmentationAPI.CreateCheckoutRequest,
         requestOptions?: BillingClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.BillingUrl> {
+    ): core.HttpResponsePromise<SegmentationAPI.BillingUrl> {
         return core.HttpResponsePromise.fromPromise(this.__createCheckout(request, requestOptions));
     }
 
     private async __createCheckout(
-        request: SegmentationApi.CreateCheckoutRequest,
+        request: SegmentationAPI.CreateCheckoutRequest,
         requestOptions?: BillingClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.BillingUrl>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.BillingUrl>> {
         const { "Idempotency-Key": idempotencyKey } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -58,7 +58,7 @@ export class BillingClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 "v1/billing/checkout",
             ),
             method: "POST",
@@ -71,18 +71,18 @@ export class BillingClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.BillingUrl, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.BillingUrl, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -94,12 +94,12 @@ export class BillingClient {
     }
 
     /**
-     * @param {SegmentationApi.CreateBillingPortalRequest} request
+     * @param {SegmentationAPI.CreateBillingPortalRequest} request
      * @param {BillingClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.billing.createBillingPortal({
@@ -107,16 +107,16 @@ export class BillingClient {
      *     })
      */
     public createBillingPortal(
-        request: SegmentationApi.CreateBillingPortalRequest,
+        request: SegmentationAPI.CreateBillingPortalRequest,
         requestOptions?: BillingClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.BillingUrl> {
+    ): core.HttpResponsePromise<SegmentationAPI.BillingUrl> {
         return core.HttpResponsePromise.fromPromise(this.__createBillingPortal(request, requestOptions));
     }
 
     private async __createBillingPortal(
-        request: SegmentationApi.CreateBillingPortalRequest,
+        request: SegmentationAPI.CreateBillingPortalRequest,
         requestOptions?: BillingClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.BillingUrl>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.BillingUrl>> {
         const { "Idempotency-Key": idempotencyKey } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -129,7 +129,7 @@ export class BillingClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 "v1/billing/portal",
             ),
             method: "POST",
@@ -142,18 +142,18 @@ export class BillingClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.BillingUrl, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.BillingUrl, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,

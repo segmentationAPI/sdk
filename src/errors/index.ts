@@ -1,2 +1,2 @@
-export { SegmentationApiError } from "./SegmentationApiError.js";
-export { SegmentationApiTimeoutError } from "./SegmentationApiTimeoutError.js";
+export { SegmentationAPIError } from "./SegmentationAPIError.js";
+export { SegmentationAPITimeoutError } from "./SegmentationAPITimeoutError.js";

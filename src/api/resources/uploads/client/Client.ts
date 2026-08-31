@@ -8,7 +8,7 @@ import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import * as SegmentationApi from "../../../index.js";
+import * as SegmentationAPI from "../../../index.js";
 
 export declare namespace UploadsClient {
     export type Options = BaseClientOptions;
@@ -26,14 +26,14 @@ export class UploadsClient {
     /**
      * Request a short-lived S3 PUT URL and a task ID for an image or video file. PUT the bytes to uploadUrl with the same Content-Type, then pass the task ID to createJob.
      *
-     * @param {SegmentationApi.PresignUploadRequest} request
+     * @param {SegmentationAPI.PresignUploadRequest} request
      * @param {UploadsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.BadRequestError}
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link SegmentationApi.InternalServerError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.BadRequestError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link SegmentationAPI.InternalServerError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.uploads.createUploadPresign({
@@ -41,16 +41,16 @@ export class UploadsClient {
      *     })
      */
     public createUploadPresign(
-        request: SegmentationApi.PresignUploadRequest,
+        request: SegmentationAPI.PresignUploadRequest,
         requestOptions?: UploadsClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.PresignUploadResponse> {
+    ): core.HttpResponsePromise<SegmentationAPI.PresignUploadResponse> {
         return core.HttpResponsePromise.fromPromise(this.__createUploadPresign(request, requestOptions));
     }
 
     private async __createUploadPresign(
-        request: SegmentationApi.PresignUploadRequest,
+        request: SegmentationAPI.PresignUploadRequest,
         requestOptions?: UploadsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.PresignUploadResponse>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.PresignUploadResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -61,7 +61,7 @@ export class UploadsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 "v1/uploads/presign",
             ),
             method: "POST",
@@ -78,7 +78,7 @@ export class UploadsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as SegmentationApi.PresignUploadResponse,
+                data: _response.body as SegmentationAPI.PresignUploadResponse,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -86,22 +86,22 @@ export class UploadsClient {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new SegmentationApi.BadRequestError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.BadRequestError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 case 500:
-                    throw new SegmentationApi.InternalServerError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.InternalServerError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,

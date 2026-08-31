@@ -203,9 +203,9 @@ A full reference for this library is available [here](https://github.com/segment
 Instantiate and use the client with the following:
 
 ```typescript
-import { SegmentationApiClient } from "@segmentationapi/sdk";
+import { SegmentationAPIClient } from "@segmentationapi/sdk";
 
-const client = new SegmentationApiClient({ token: "YOUR_TOKEN" });
+const client = new SegmentationAPIClient({ token: "YOUR_TOKEN" });
 await client.uploads.createUploadPresign({
     contentType: "image/png"
 });
@@ -216,10 +216,10 @@ await client.uploads.createUploadPresign({
 This SDK allows you to configure different environments for API requests.
 
 ```typescript
-import { SegmentationApiClient, SegmentationApiEnvironment } from "@segmentationapi/sdk";
+import { SegmentationAPIClient, SegmentationAPIEnvironment } from "@segmentationapi/sdk";
 
-const client = new SegmentationApiClient({
-    environment: SegmentationApiEnvironment.Default,
+const client = new SegmentationAPIClient({
+    environment: SegmentationAPIEnvironment.Default,
 });
 ```
 
@@ -229,9 +229,9 @@ The SDK exports all request and response types as TypeScript interfaces. Simply 
 following namespace:
 
 ```typescript
-import { SegmentationApi } from "@segmentationapi/sdk";
+import { SegmentationAPI } from "@segmentationapi/sdk";
 
-const request: SegmentationApi.PresignUploadRequest = {
+const request: SegmentationAPI.PresignUploadRequest = {
     ...
 };
 ```
@@ -242,12 +242,12 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```typescript
-import { SegmentationApiError } from "@segmentationapi/sdk";
+import { SegmentationAPIError } from "@segmentationapi/sdk";
 
 try {
     await client.uploads.createUploadPresign(...);
 } catch (err) {
-    if (err instanceof SegmentationApiError) {
+    if (err instanceof SegmentationAPIError) {
         console.log(err.statusCode);
         console.log(err.message);
         console.log(err.body);
@@ -273,9 +273,9 @@ const client = new UploadsClient({...});
 If you would like to send additional headers as part of the request, use the `headers` request option.
 
 ```typescript
-import { SegmentationApiClient } from "@segmentationapi/sdk";
+import { SegmentationAPIClient } from "@segmentationapi/sdk";
 
-const client = new SegmentationApiClient({
+const client = new SegmentationAPIClient({
     ...
     headers: {
         'X-Custom-Header': 'custom value'
@@ -368,9 +368,9 @@ console.log(rawResponse.headers['X-My-Header']);
 The SDK supports logging. You can configure the logger by passing in a `logging` object to the client options.
 
 ```typescript
-import { SegmentationApiClient, logging } from "@segmentationapi/sdk";
+import { SegmentationAPIClient, logging } from "@segmentationapi/sdk";
 
-const client = new SegmentationApiClient({
+const client = new SegmentationAPIClient({
     ...
     logging: {
         level: logging.LogLevel.Debug, // defaults to logging.LogLevel.Info

@@ -8,7 +8,7 @@ import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import * as SegmentationApi from "../../../index.js";
+import * as SegmentationAPI from "../../../index.js";
 
 export declare namespace ApiKeysClient {
     export type Options = BaseClientOptions;
@@ -26,22 +26,22 @@ export class ApiKeysClient {
     /**
      * @param {ApiKeysClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.apiKeys.listApiKeys()
      */
     public listApiKeys(
         requestOptions?: ApiKeysClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.ApiKeyList> {
+    ): core.HttpResponsePromise<SegmentationAPI.ApiKeyList> {
         return core.HttpResponsePromise.fromPromise(this.__listApiKeys(requestOptions));
     }
 
     private async __listApiKeys(
         requestOptions?: ApiKeysClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.ApiKeyList>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.ApiKeyList>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -52,7 +52,7 @@ export class ApiKeysClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 "v1/api-keys",
             ),
             method: "GET",
@@ -65,18 +65,18 @@ export class ApiKeysClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.ApiKeyList, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.ApiKeyList, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -88,12 +88,12 @@ export class ApiKeysClient {
     }
 
     /**
-     * @param {SegmentationApi.CreateApiKeyRequest} request
+     * @param {SegmentationAPI.CreateApiKeyRequest} request
      * @param {ApiKeysClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.apiKeys.createApiKey({
@@ -102,16 +102,16 @@ export class ApiKeysClient {
      *     })
      */
     public createApiKey(
-        request: SegmentationApi.CreateApiKeyRequest,
+        request: SegmentationAPI.CreateApiKeyRequest,
         requestOptions?: ApiKeysClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.CreateApiKeyResponse> {
+    ): core.HttpResponsePromise<SegmentationAPI.CreateApiKeyResponse> {
         return core.HttpResponsePromise.fromPromise(this.__createApiKey(request, requestOptions));
     }
 
     private async __createApiKey(
-        request: SegmentationApi.CreateApiKeyRequest,
+        request: SegmentationAPI.CreateApiKeyRequest,
         requestOptions?: ApiKeysClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.CreateApiKeyResponse>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.CreateApiKeyResponse>> {
         const { "Idempotency-Key": idempotencyKey, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -124,7 +124,7 @@ export class ApiKeysClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 "v1/api-keys",
             ),
             method: "POST",
@@ -140,18 +140,18 @@ export class ApiKeysClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.CreateApiKeyResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.CreateApiKeyResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -163,12 +163,12 @@ export class ApiKeysClient {
     }
 
     /**
-     * @param {SegmentationApi.RevokeApiKeyRequest} request
+     * @param {SegmentationAPI.RevokeApiKeyRequest} request
      * @param {ApiKeysClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.apiKeys.revokeApiKey({
@@ -176,16 +176,16 @@ export class ApiKeysClient {
      *     })
      */
     public revokeApiKey(
-        request: SegmentationApi.RevokeApiKeyRequest,
+        request: SegmentationAPI.RevokeApiKeyRequest,
         requestOptions?: ApiKeysClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.ApiKeyMutation> {
+    ): core.HttpResponsePromise<SegmentationAPI.ApiKeyMutation> {
         return core.HttpResponsePromise.fromPromise(this.__revokeApiKey(request, requestOptions));
     }
 
     private async __revokeApiKey(
-        request: SegmentationApi.RevokeApiKeyRequest,
+        request: SegmentationAPI.RevokeApiKeyRequest,
         requestOptions?: ApiKeysClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.ApiKeyMutation>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.ApiKeyMutation>> {
         const { keyId } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -197,7 +197,7 @@ export class ApiKeysClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 `v1/api-keys/${core.url.encodePathParam(keyId)}`,
             ),
             method: "DELETE",
@@ -210,18 +210,18 @@ export class ApiKeysClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.ApiKeyMutation, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.ApiKeyMutation, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,

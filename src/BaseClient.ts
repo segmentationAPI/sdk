@@ -12,7 +12,7 @@ export type AuthOption =
     | BearerAuthProvider.AuthOptions;
 
 export type BaseClientOptions = {
-    environment?: core.Supplier<environments.SegmentationApiEnvironment | string>;
+    environment?: core.Supplier<environments.SegmentationAPIEnvironment | string>;
     /** Specify a custom URL to connect the client to. */
     baseUrl?: core.Supplier<string>;
     /** Additional headers to include in requests. */
@@ -65,8 +65,8 @@ export function normalizeClientOptions<T extends BaseClientOptions = BaseClientO
         {
             "X-Fern-Language": "JavaScript",
             "X-Fern-SDK-Name": "@segmentationapi/sdk",
-            "X-Fern-SDK-Version": "1.0.0",
-            "User-Agent": "@segmentationapi/sdk/1.0.0",
+            "X-Fern-SDK-Version": "1.0.1",
+            "User-Agent": "@segmentationapi/sdk/1.0.1",
             "X-Fern-Runtime": core.RUNTIME.type,
             "X-Fern-Runtime-Version": core.RUNTIME.version,
         },

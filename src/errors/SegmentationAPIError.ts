@@ -3,7 +3,7 @@
 import type * as core from "../core/index.js";
 import { toJson } from "../core/json.js";
 
-export class SegmentationApiError extends Error {
+export class SegmentationAPIError extends Error {
     public readonly statusCode?: number;
     public readonly body?: unknown;
     public readonly rawResponse?: core.RawResponse;
@@ -28,7 +28,7 @@ export class SegmentationApiError extends Error {
             Error.captureStackTrace(this, this.constructor);
         }
 
-        this.name = "SegmentationApiError";
+        this.name = "SegmentationAPIError";
         this.statusCode = statusCode;
         this.body = body;
         this.rawResponse = rawResponse;

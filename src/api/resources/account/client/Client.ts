@@ -7,7 +7,7 @@ import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import * as SegmentationApi from "../../../index.js";
+import * as SegmentationAPI from "../../../index.js";
 
 export declare namespace AccountClient {
     export type Options = BaseClientOptions;
@@ -25,22 +25,22 @@ export class AccountClient {
     /**
      * @param {AccountClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.account.getAccount()
      */
     public getAccount(
         requestOptions?: AccountClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.Account> {
+    ): core.HttpResponsePromise<SegmentationAPI.Account> {
         return core.HttpResponsePromise.fromPromise(this.__getAccount(requestOptions));
     }
 
     private async __getAccount(
         requestOptions?: AccountClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.Account>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.Account>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -51,7 +51,7 @@ export class AccountClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 "v1/account",
             ),
             method: "GET",
@@ -64,18 +64,18 @@ export class AccountClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.Account, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.Account, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,
@@ -89,22 +89,22 @@ export class AccountClient {
     /**
      * @param {AccountClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link SegmentationApi.UnauthorizedError}
-     * @throws {@link errors.SegmentationApiError}
-     * @throws {@link errors.SegmentationApiTimeoutError}
+     * @throws {@link SegmentationAPI.UnauthorizedError}
+     * @throws {@link errors.SegmentationAPIError}
+     * @throws {@link errors.SegmentationAPITimeoutError}
      *
      * @example
      *     await client.account.getAccountOverview()
      */
     public getAccountOverview(
         requestOptions?: AccountClient.RequestOptions,
-    ): core.HttpResponsePromise<SegmentationApi.AccountOverview> {
+    ): core.HttpResponsePromise<SegmentationAPI.AccountOverview> {
         return core.HttpResponsePromise.fromPromise(this.__getAccountOverview(requestOptions));
     }
 
     private async __getAccountOverview(
         requestOptions?: AccountClient.RequestOptions,
-    ): Promise<core.WithRawResponse<SegmentationApi.AccountOverview>> {
+    ): Promise<core.WithRawResponse<SegmentationAPI.AccountOverview>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -115,7 +115,7 @@ export class AccountClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.SegmentationApiEnvironment.Default,
+                    environments.SegmentationAPIEnvironment.Default,
                 "v1/account/overview",
             ),
             method: "GET",
@@ -128,18 +128,18 @@ export class AccountClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as SegmentationApi.AccountOverview, rawResponse: _response.rawResponse };
+            return { data: _response.body as SegmentationAPI.AccountOverview, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new SegmentationApi.UnauthorizedError(
-                        _response.error.body as SegmentationApi.ApiError,
+                    throw new SegmentationAPI.UnauthorizedError(
+                        _response.error.body as SegmentationAPI.ApiError,
                         _response.rawResponse,
                     );
                 default:
-                    throw new errors.SegmentationApiError({
+                    throw new errors.SegmentationAPIError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                         rawResponse: _response.rawResponse,

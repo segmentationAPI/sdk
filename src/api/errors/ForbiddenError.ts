@@ -2,12 +2,12 @@
 
 import type * as core from "../../core/index.js";
 import * as errors from "../../errors/index.js";
-import type * as SegmentationApi from "../index.js";
+import type * as SegmentationAPI from "../index.js";
 
-export class ForbiddenError extends errors.SegmentationApiError {
-    public declare readonly body: SegmentationApi.ApiError;
+export class ForbiddenError extends errors.SegmentationAPIError {
+    public declare readonly body: SegmentationAPI.ApiError;
 
-    constructor(body: SegmentationApi.ApiError, rawResponse?: core.RawResponse) {
+    constructor(body: SegmentationAPI.ApiError, rawResponse?: core.RawResponse) {
         super({
             message: "ForbiddenError",
             statusCode: 403,

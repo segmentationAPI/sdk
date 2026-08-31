@@ -3,7 +3,7 @@
     "generatorName": "fernapi/fern-typescript-sdk",
     "generatorVersion": "3.88.3",
     "generatorConfig": {
-        "namespaceExport": "SegmentationApi",
+        "namespaceExport": "SegmentationAPI",
         "defaultTimeout": 60000,
         "packageJson": {
             "description": "Official TypeScript SDK for SegmentationAPI.",
@@ -21,9 +21,9 @@
             }
         }
     },
-    "originGitCommit": "40d2fdba8bb4b1d031c7bf437c849767139febee",
+    "originGitCommit": "e61da79193a653dc86648d240d574b704ef6232e",
     "originGitCommitIsDirty": true,
     "invokedBy": "manual",
-    "requestedVersion": "1.0.0",
-    "sdkVersion": "1.0.0"
+    "requestedVersion": "1.0.1",
+    "sdkVersion": "1.0.1"
 }

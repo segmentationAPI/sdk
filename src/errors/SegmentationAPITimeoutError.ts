@@ -2,7 +2,7 @@
 
 import * as errors from "./index.js";
 
-export class SegmentationApiTimeoutError extends errors.SegmentationApiError {
+export class SegmentationAPITimeoutError extends errors.SegmentationAPIError {
     constructor(message: string, opts?: { cause?: unknown }) {
         super({
             message: message,
@@ -13,6 +13,6 @@ export class SegmentationApiTimeoutError extends errors.SegmentationApiError {
             Error.captureStackTrace(this, this.constructor);
         }
 
-        this.name = "SegmentationApiTimeoutError";
+        this.name = "SegmentationAPITimeoutError";
     }
 }
