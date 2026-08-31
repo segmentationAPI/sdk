@@ -48,10 +48,6 @@ export class APIError extends Error {
 
 export class APIConnectionError extends Error {
   override readonly name: string = "APIConnectionError";
-
-  constructor(message: string, options: ErrorOptions) {
-    super(message, options);
-  }
 }
 
 export class APITimeoutError extends APIConnectionError {

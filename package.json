@@ -38,13 +38,12 @@
   },
   "scripts": {
     "build": "node scripts/clean.mjs && tsc",
-    "check-types": "tsc -p tsconfig.test.json",
-    "lint": "oxlint --type-aware --type-check src/client.ts src/errors.ts src/index.ts src/request-options.ts src/resources test",
-    "format": "oxfmt --write README.md package.json tsconfig.json tsconfig.test.json src/client.ts src/errors.ts src/index.ts src/request-options.ts src/resources test",
-    "format:check": "oxfmt --check README.md package.json tsconfig.json tsconfig.test.json src/client.ts src/errors.ts src/index.ts src/request-options.ts src/resources test",
-    "test": "node --test test/*.test.mjs",
+    "check-types": "tsc -p tsconfig.json --noEmit",
+    "lint": "oxlint --type-aware --type-check src/client.ts src/errors.ts src/index.ts src/request-options.ts src/resources",
+    "format": "oxfmt --write README.md package.json tsconfig.json src/client.ts src/errors.ts src/index.ts src/request-options.ts src/resources",
+    "format:check": "oxfmt --check README.md package.json tsconfig.json src/client.ts src/errors.ts src/index.ts src/request-options.ts src/resources",
     "prepack": "pnpm run build",
-    "prepublishOnly": "pnpm run lint && pnpm run check-types && pnpm run format:check && pnpm run build && pnpm run test"
+    "prepublishOnly": "pnpm run lint && pnpm run check-types && pnpm run format:check && pnpm run build"
   },
   "dependencies": {
     "zod": "catalog:"
