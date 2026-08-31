@@ -6,7 +6,6 @@
         "namespaceExport": "SegmentationApi",
         "defaultTimeout": 60000,
         "packageJson": {
-            "name": "@segmentationapi/sdk",
             "description": "Official TypeScript SDK for SegmentationAPI.",
             "keywords": ["api", "sdk", "segmentation"],
             "homepage": "https://www.segmentationapi.com",

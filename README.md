@@ -1,7 +1,7 @@
 # Segmentationapi TypeScript Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2FsegmentationAPI%2Fsdk)
-[![npm shield](https://img.shields.io/npm/v/)](https://www.npmjs.com/package/)
+[![npm shield](https://img.shields.io/npm/v/@segmentationapi/sdk)](https://www.npmjs.com/package/@segmentationapi/sdk)
 
 The Segmentationapi TypeScript library provides convenient access to the Segmentationapi APIs from TypeScript.
 
@@ -191,7 +191,7 @@ pnpm turbo run lint check-types format:check test --filter=@segmentationapi/sdk
 ## Installation
 
 ```sh
-npm i -s 
+npm i -s @segmentationapi/sdk
 ```
 
 ## Reference
@@ -203,7 +203,7 @@ A full reference for this library is available [here](https://github.com/segment
 Instantiate and use the client with the following:
 
 ```typescript
-import { SegmentationApiClient } from "";
+import { SegmentationApiClient } from "@segmentationapi/sdk";
 
 const client = new SegmentationApiClient({ token: "YOUR_TOKEN" });
 await client.uploads.createUploadPresign({
@@ -216,7 +216,7 @@ await client.uploads.createUploadPresign({
 This SDK allows you to configure different environments for API requests.
 
 ```typescript
-import { SegmentationApiClient, SegmentationApiEnvironment } from "SegmentationApi";
+import { SegmentationApiClient, SegmentationApiEnvironment } from "@segmentationapi/sdk";
 
 const client = new SegmentationApiClient({
     environment: SegmentationApiEnvironment.Default,
@@ -229,7 +229,7 @@ The SDK exports all request and response types as TypeScript interfaces. Simply 
 following namespace:
 
 ```typescript
-import { SegmentationApi } from "SegmentationApi";
+import { SegmentationApi } from "@segmentationapi/sdk";
 
 const request: SegmentationApi.PresignUploadRequest = {
     ...
@@ -242,7 +242,7 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```typescript
-import { SegmentationApiError } from "SegmentationApi";
+import { SegmentationApiError } from "@segmentationapi/sdk";
 
 try {
     await client.uploads.createUploadPresign(...);
@@ -263,7 +263,7 @@ try {
 This SDK supports direct imports of subpackage clients, which allows JavaScript bundlers to tree-shake and include only the imported subpackage code. This results in much smaller bundle sizes.
 
 ```typescript
-import { UploadsClient } from 'SegmentationApi/uploads';
+import { UploadsClient } from '@segmentationapi/sdk/uploads';
 
 const client = new UploadsClient({...});
 ```
@@ -273,7 +273,7 @@ const client = new UploadsClient({...});
 If you would like to send additional headers as part of the request, use the `headers` request option.
 
 ```typescript
-import { SegmentationApiClient } from "SegmentationApi";
+import { SegmentationApiClient } from "@segmentationapi/sdk";
 
 const client = new SegmentationApiClient({
     ...
@@ -368,7 +368,7 @@ console.log(rawResponse.headers['X-My-Header']);
 The SDK supports logging. You can configure the logger by passing in a `logging` object to the client options.
 
 ```typescript
-import { SegmentationApiClient, logging } from "SegmentationApi";
+import { SegmentationApiClient, logging } from "@segmentationapi/sdk";
 
 const client = new SegmentationApiClient({
     ...
