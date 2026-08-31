@@ -8,17 +8,17 @@ concurrency:
 
 jobs:
   compile:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -27,17 +27,17 @@ jobs:
         run: pnpm build
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
                 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -48,21 +48,23 @@ jobs:
   publish:
     needs: [ compile, test ]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    # npm trusted publishing (OIDC) only supports GitHub cloud-hosted runners;
+    # keep this off Blacksmith. See docs.npmjs.com/trusted-publishers.
     runs-on: ubuntu-latest
     permissions:
       contents: read   # Required for checkout
       id-token: write  # Required for OIDC
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: "lts/Krypton"
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
